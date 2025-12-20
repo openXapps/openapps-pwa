@@ -1,0 +1,7 @@
+import type { SFirestoreExtention } from "./firestore-schemas"
+
+// /appModules/
+export type SAppModule = SFirestoreExtention & {
+  moduleName: string
+  moduleDesc: string | null
+}
