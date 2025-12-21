@@ -12,7 +12,7 @@ export type TUserInfoType = {
 /**
  * Firestore response type for getDocument().
  */
-export type GetDocumentProps<T> = {
+export type TGetDocumentProps<T> = {
   ok: boolean
   message: string
   payload: T
@@ -21,7 +21,7 @@ export type GetDocumentProps<T> = {
 /**
  * Firestore response type for getAllDocuments().
  */
-export type GetAllDocumentsProps<T> = {
+export type TGetAllDocumentsProps<T> = {
   ok: boolean
   message: string
   payload: T[]

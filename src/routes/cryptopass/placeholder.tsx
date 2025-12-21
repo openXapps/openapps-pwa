@@ -1,5 +1,5 @@
 
-export default function RouteComponent() {
+export default function CryptoPass() {
   return (
     <div>Route Component</div>
   )

@@ -8,22 +8,22 @@ export const appList: AppObject[] = [
   {
     title: 'Movies DATABASE',
     description: 'Brows through all the latest movies, and much more.',
-    url: 'apps/movies/'
+    url: '/movies'
   }, {
     title: 'Quick NOTES',
     description: 'Make quick notes and save them to your device.',
-    url: 'apps/notes'
+    url: '/notes'
   }, {
     title: 'Book MARKER',
     description: 'Bookmark your favourite sites and save them to your device.',
-    url: 'apps/bookmarker'
+    url: '/bookmarker'
   }, {
     title: 'Crypto PASS',
     description: 'Manage your passwords securely and save them to your device.',
-    url: 'apps/cryptopass'
+    url: '/cryptopass'
   }, {
     title: 'My LIST',
     description: 'Manage shopping and/or to-do lists quick and easy. Save them to your device.',
-    url: 'apps/mylist'
+    url: '/mylist'
   }
 ];

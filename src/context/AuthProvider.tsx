@@ -31,7 +31,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     const unsubscribe = state.auth.onAuthStateChanged(user => {
-      // console.log("onAuthStateChanged triggered: ", state.auth);
+      // console.log("onAuthStateChanged triggered (auth): ", state.auth);
+      // console.log("onAuthStateChanged triggered (user): ", user);
       setLoading(false)
       dispatch({ type: "SET_ISAUTHORIZED", payload: user != null })
     })

@@ -1,27 +1,27 @@
-import type { AuthContextState, AuthReducerActions } from '@/lib/types';
+import type { TAuthContextState, TAuthReducerActions } from "@/types/auth-context-types"
 
 /**
  * Reducer function to mutate Auth state
- * @param {AuthContextState} state Current state
- * @param {AuthReducerActions} action Reducer action type and payload
+ * @param {TAuthContextState} state Current state
+ * @param {TAuthReducerActions} action Reducer action type and payload
  */
-export default function AuthReducer(state: AuthContextState, action: AuthReducerActions): AuthContextState {
+export default function AuthReducer(state: TAuthContextState, action: TAuthReducerActions): TAuthContextState {
 
-  // console.log('auth reducer: state.......', state);
-  // console.log('auth reducer: action......', action);
+  // console.log("auth reducer: state.......", state);
+  // console.log("auth reducer: action......", action);
 
   switch (action.type) {
-    case 'SET_AUTH':
+    case "SET_AUTH":
       return {
         ...state,
         auth: action.payload,
-      };
-    case 'SET_ISAUTHORIZED':
+      }
+    case "SET_ISAUTHORIZED":
       return {
         ...state,
         isAuthorized: action.payload,
-      };
+      }
     default:
-      return state;
+      return state
   };
 }

@@ -28,7 +28,7 @@ export default function Home() {
 
   return (
     <>
-      <div className="mx-auto max-w-screen-sm flex flex-col gap-3 md:gap-6 mt-3 mb-15">
+      <div className="mx-auto max-w-screen-sm flex flex-col gap-3 md:gap-6 mb-15">
         {appList.map((v, i) => (
           <AppCard key={i} app={v} enabled={cookiesAccepted} />
         ))}

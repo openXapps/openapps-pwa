@@ -1,5 +1,5 @@
 
-export default function RouteComponent() {
+export default function MyList() {
   return (
     <div>Route Component</div>
   )
