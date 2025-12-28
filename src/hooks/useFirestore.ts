@@ -13,7 +13,7 @@ import {
 } from "firebase/firestore"
 
 import useFirestoreContext from "@/hooks/useFirestoreContext"
-import type { GetAllDocumentsProps, GetDocumentProps } from "@/types/firestore-types"
+import type { TGetAllDocumentsProps, TGetDocumentProps } from "@/types/firestore-types"
 
 // https://firebase.google.com/docs/firestore/query-data/get-data
 // https://firebase.google.com/docs/firestore/manage-data/add-data
@@ -26,9 +26,9 @@ export default function useFirestore() {
   /**
    * Fetch a document from a collection
    */
-  async function getDocument<T>(path: string, id: string, converter: FirestoreDataConverter<T>): Promise<GetDocumentProps<T>> {
+  async function getDocument<T>(path: string, id: string, converter: FirestoreDataConverter<T>): Promise<TGetDocumentProps<T>> {
     setIsLoading(true)
-    let response: GetDocumentProps<T> = { message: "No document found", ok: false, payload: <T>{} }
+    let response: TGetDocumentProps<T> = { message: "No document found", ok: false, payload: {} as T }
     const docRef = doc(db, path, id).withConverter(converter)
     const docSnap = await getDoc(docRef)
 
@@ -42,9 +42,9 @@ export default function useFirestore() {
   /**
    * Fetch documents from a collection
    */
-  async function getAllDocuments<T>(path: string, converter: FirestoreDataConverter<T>): Promise<GetAllDocumentsProps<T>> {
+  async function getAllDocuments<T>(path: string, converter: FirestoreDataConverter<T>): Promise<TGetAllDocumentsProps<T>> {
     setIsLoading(true)
-    let response: GetAllDocumentsProps<T> = { message: "No documents found", ok: false, payload: [] }
+    let response: TGetAllDocumentsProps<T> = { message: "No documents found", ok: false, payload: [] }
     let documents: T[] = []
     const querySnap = await getDocs(collection(db, path).withConverter(converter))
 

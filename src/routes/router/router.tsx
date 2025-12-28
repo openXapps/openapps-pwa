@@ -12,6 +12,7 @@ import Bookmarker from "@/routes/bookmarker/placeholder"
 import CryptoPass from "@/routes/cryptopass/placeholder"
 import MyList from "@/routes/mylist/placeholder"
 import Notes from "@/routes/notes/placeholder"
+import AppModules from "../admin/app-modules"
 
 import useAuth from "@/hooks/useAuth"
 
@@ -34,6 +35,7 @@ export default function Router() {
             <Route path="cryptopass" element={<CryptoPass />} />
             <Route path="mylist" element={<MyList />} />
             <Route path="notes" element={<Notes />} />
+            <Route path="appmodules" element={<AppModules />} />
           </Route>
         </Route>
         <Route path="*" element={<p>Error</p>}></Route>

@@ -3,12 +3,29 @@ import { useState, useEffect } from "react"
 import Disclaimer from "@/components/Disclaimer"
 import AppCard from "@/components/AppCard"
 
-import { appList } from "@/data/app-data"
+import type { SAppModule } from "@/schemas/app-schemas"
+import type { TGetAllDocumentsProps } from "@/types/firestore-types"
+import useFirestore from "@/hooks/useFirestore"
+import { appModuleConverter } from "@/lib/converter"
+
+// import { appList } from "@/data/app-data"
 
 const cookieName = "openapps_accept_t&c"
 
 export default function Home() {
+  const { getAllDocuments } = useFirestore()
+  const [appModules, setAppModules] = useState<SAppModule[]>([])
   const [cookiesAccepted, setCookiesAccepted] = useState(true)
+
+  async function fetchData() {
+    const data: TGetAllDocumentsProps<SAppModule> = await getAllDocuments("/appModules/", appModuleConverter)
+    setAppModules(data.payload)
+  }
+
+  useEffect(() => {
+    fetchData()
+    return () => { }
+  }, [])
 
   useEffect(() => {
     const cookies = decodeURIComponent(document.cookie)
@@ -29,8 +46,9 @@ export default function Home() {
   return (
     <>
       <div className="mx-auto max-w-screen-sm flex flex-col gap-3 md:gap-6 mb-15">
-        {appList.map((v, i) => (
-          <AppCard key={i} app={v} enabled={cookiesAccepted} />
+        {/* {appList.map((v, i) => ( */}
+        {appModules.map(v => (
+          <AppCard key={v.id} app={v} enabled={cookiesAccepted} />
         ))}
       </div>
       <Disclaimer cookiesAccepted={cookiesAccepted} handleAcceptCookies={handleAcceptCookies} />

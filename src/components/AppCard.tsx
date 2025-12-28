@@ -1,9 +1,9 @@
 import { Link } from "react-router"
 import { twMerge } from "tailwind-merge"
 
-import type { AppObject } from "@/data/app-data"
+import type { SAppModule } from "@/schemas/app-schemas"
 
-export default function AppCard({ app, enabled }: { app: AppObject, enabled: boolean }) {
+export default function AppCard({ app, enabled }: { app: SAppModule, enabled: boolean }) {
   return (
     <Link
       className={twMerge(enabled
@@ -13,8 +13,11 @@ export default function AppCard({ app, enabled }: { app: AppObject, enabled: boo
       )}
       to={app.url}
     >
-      <h1 className="text-xl font-bold font-mono">{app.title}</h1>
-      <p className="font-mono">{app.description}</p>
+      <h1 className="text-xl font-bold font-mono">{app.moduleName}</h1>
+      <p className="font-mono">{app.moduleDesc}</p>
+      <p className="font-mono">Created: {app.updatedAt.toDateString()}</p>
+      <p className="font-mono">Updated: {app.createdAt.toDateString()}</p>
+      <p className="font-mono">ID: {app.id}</p>
     </Link>
   )
 }
