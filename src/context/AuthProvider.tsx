@@ -1,5 +1,5 @@
 import { createContext, useEffect, useReducer, useState } from "react"
-import { getAuth, connectAuthEmulator } from "firebase/auth"
+import { getAuth, connectAuthEmulator, type ParsedToken } from "firebase/auth"
 
 import { app } from "@/lib/firebase"
 import AuthReducer from "@/context/AuthReducer"
@@ -13,6 +13,7 @@ connectAuthEmulator(auth, "http://127.0.0.1:9099")
 const initAppContextState: TAuthContextState = {
   auth: auth,
   isAuthorized: false,
+  isAdmin: false,
 }
 
 export const AuthProviderContext = createContext<TAuthContextType>({
@@ -30,11 +31,26 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
+    function checkIfAdmin(): boolean {
+      let result = false
+      if (auth.currentUser) {
+        auth.currentUser?.getIdTokenResult(false)
+          .then(data => {
+            const claims: ParsedToken = data.claims
+            console.log("claimes:", claims)
+            if ("admin" in claims) if (claims["admin"] === true) result = true
+          })
+        console.log("in Promise:", result)
+      }
+      console.log("after Promise:", result)
+      return result
+    }
+
     const unsubscribe = state.auth.onAuthStateChanged(user => {
       // console.log("onAuthStateChanged triggered (auth): ", state.auth);
       // console.log("onAuthStateChanged triggered (user): ", user);
       setLoading(false)
-      dispatch({ type: "SET_ISAUTHORIZED", payload: user != null })
+      dispatch({ type: "SET_AUTHORIZATION", payload: { isAuthorized: user != null, isAdmin: checkIfAdmin() } })
     })
     return unsubscribe
   }, [])

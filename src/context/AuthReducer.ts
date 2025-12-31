@@ -11,15 +11,16 @@ export default function AuthReducer(state: TAuthContextState, action: TAuthReduc
   // console.log("auth reducer: action......", action);
 
   switch (action.type) {
-    case "SET_AUTH":
+    case "SET_FIREBASE_AUTH":
       return {
         ...state,
         auth: action.payload,
       }
-    case "SET_ISAUTHORIZED":
+    case "SET_AUTHORIZATION":
       return {
         ...state,
-        isAuthorized: action.payload,
+        isAuthorized: action.payload.isAuthorized,
+        isAdmin: action.payload.isAdmin,
       }
     default:
       return state

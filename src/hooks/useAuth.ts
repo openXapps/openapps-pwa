@@ -13,6 +13,7 @@ import {
 
 import { auth, AuthProviderContext } from "@/context/AuthProvider"
 import type { TUserInfoType } from "@/types/firestore-types"
+import type { TAuthorizationPayload } from "@/types/auth-context-types"
 
 /**
  * Auth context hook
@@ -34,8 +35,8 @@ export default function useAuth() {
   }
 
   // Set global context authorized indicator
-  function setAuthorized(value: boolean) {
-    context.dispatch({ type: "SET_ISAUTHORIZED", payload: value })
+  function setAuthorization(payload: TAuthorizationPayload) {
+    context.dispatch({ type: "SET_AUTHORIZATION", payload: payload })
   }
 
   function getUID(): string | undefined {
@@ -91,7 +92,8 @@ export default function useAuth() {
   return {
     auth: context.state.auth,
     isAuthorized: context.state.isAuthorized,
-    setAuthorized: setAuthorized,
+    isAdmin: context.state.isAdmin,
+    setAuthorization: setAuthorization,
     signUpUser: signUpUser,
     signInUser: signInUser,
     signOutUser: signOutUser,

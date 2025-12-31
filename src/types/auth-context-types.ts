@@ -6,14 +6,23 @@ import type { Auth } from 'firebase/auth'
 export type TAuthContextState = {
   auth: Auth
   isAuthorized: boolean
+  isAdmin: boolean
 }
 
 /**
  * Reducer action type for Firebase Auth.
  */
 type TAuthReducerSetAuth = {
-  type: 'SET_AUTH'
+  type: 'SET_FIREBASE_AUTH'
   payload: Auth
+}
+
+/**
+ * Authorization context payload
+ */
+export type TAuthorizationPayload = {
+  isAuthorized: boolean
+  isAdmin: boolean
 }
 
 /**
@@ -21,8 +30,8 @@ type TAuthReducerSetAuth = {
  * This state is set in AuthProvider on initial launch.
  */
 type TAuthReducerSetAuthorized = {
-  type: 'SET_ISAUTHORIZED'
-  payload: boolean
+  type: 'SET_AUTHORIZATION'
+  payload: TAuthorizationPayload
 }
 
 /**

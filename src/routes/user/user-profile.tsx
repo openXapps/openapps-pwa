@@ -1,36 +1,21 @@
-
-import { useEffect, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 import { useNavigate } from 'react-router'
 
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 
 import useAuth from '@/hooks/useAuth'
-import { auth } from "@/context/AuthProvider"
-import { Textarea } from "@/components/ui/textarea"
-import { Label } from "@/components/ui/label"
 
 // https://picsum.photos/
 
 export default function UserProfile() {
   const rrNavigate = useNavigate()
-  const { getInfo, setInfo, setEmail, setPassword, getUID } = useAuth()
+  const { getInfo, setInfo, setEmail, setPassword, getUID, isAdmin } = useAuth()
   const [isBusy, setIsBusy] = useState(false)
   const nameRef = useRef<HTMLInputElement | null>(null)
   const photoRef = useRef<HTMLInputElement | null>(null)
   const emailRef = useRef<HTMLInputElement | null>(null)
   const passwordRef = useRef<HTMLInputElement | null>(null)
-  const [token, setToken] = useState<string | undefined>("")
-
-  useEffect(() => {
-    async function getToken() {
-      const result = await auth.currentUser?.getIdToken(false)
-      setToken(result)
-    }
-    getToken()
-
-    return () => { }
-  }, [])
 
   const handleUpdateUser = async (e: React.FormEvent<HTMLFormElement | HTMLButtonElement>) => {
     e.preventDefault()
@@ -89,10 +74,7 @@ export default function UserProfile() {
         <Button onClick={() => rrNavigate(-1)} disabled={isBusy}>Back</Button>
       </div>
       <p>Email validated: {getInfo().emailVerified ? 'YES' : 'NO'}</p>
-      <div className="space-y-2">
-        <Label htmlFor="token-key">Token Key:</Label>
-        <Textarea id="token-key" rows={10} defaultValue={token} />
-      </div>
+      <p>Administrator: {isAdmin ? 'YES' : 'NO'}</p>
     </div>
   )
 }
