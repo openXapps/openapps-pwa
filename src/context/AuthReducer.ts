@@ -20,6 +20,10 @@ export default function AuthReducer(state: TAuthContextState, action: TAuthReduc
       return {
         ...state,
         isAuthorized: action.payload.isAuthorized,
+      }
+    case "SET_IS_ADMIN":
+      return {
+        ...state,
         isAdmin: action.payload.isAdmin,
       }
     default:

@@ -10,7 +10,7 @@ import useAuth from '@/hooks/useAuth'
 
 export default function UserProfile() {
   const rrNavigate = useNavigate()
-  const { getInfo, setInfo, setEmail, setPassword, getUID, isAdmin } = useAuth()
+  const { getInfo, setInfo, setEmail, setPassword, getUID, getIsAdmin } = useAuth()
   const [isBusy, setIsBusy] = useState(false)
   const nameRef = useRef<HTMLInputElement | null>(null)
   const photoRef = useRef<HTMLInputElement | null>(null)
@@ -74,7 +74,7 @@ export default function UserProfile() {
         <Button onClick={() => rrNavigate(-1)} disabled={isBusy}>Back</Button>
       </div>
       <p>Email validated: {getInfo().emailVerified ? 'YES' : 'NO'}</p>
-      <p>Administrator: {isAdmin ? 'YES' : 'NO'}</p>
+      <p>Administrator: {getIsAdmin() ? 'YES' : 'NO'}</p>
     </div>
   )
 }

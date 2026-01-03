@@ -9,11 +9,11 @@ import {
   updateProfile,
   updateEmail,
   updatePassword,
+  type ParsedToken,
 } from "firebase/auth"
 
 import { auth, AuthProviderContext } from "@/context/AuthProvider"
 import type { TUserInfoType } from "@/types/firestore-types"
-import type { TAuthorizationPayload } from "@/types/auth-context-types"
 
 /**
  * Auth context hook
@@ -34,13 +34,33 @@ export default function useAuth() {
     return signOut(auth)
   }
 
-  // Set global context authorized indicator
-  function setAuthorization(payload: TAuthorizationPayload) {
-    context.dispatch({ type: "SET_AUTHORIZATION", payload: payload })
-  }
-
   function getUID(): string | undefined {
     return context.state.auth.currentUser?.uid
+  }
+
+  function getIsAuthorized(): boolean {
+    return context.state.isAuthorized
+  }
+
+  function getIsAdmin(): boolean {
+    return context.state.isAdmin
+  }
+
+  function setIsAuthorized(isAuthorized: boolean): void {
+    context.dispatch({ type: "SET_AUTHORIZATION", payload: { isAuthorized: isAuthorized } })
+  }
+
+  function setIsAdmin(): void {
+    if (auth.currentUser) {
+      auth.currentUser.getIdTokenResult(false)
+        .then(data => {
+          const claims: ParsedToken = data.claims
+          // console.log("claimes:", claims)
+          if ("admin" in claims) if (claims["admin"]) {
+            context.dispatch({ type: "SET_IS_ADMIN", payload: { isAdmin: true } })
+          }
+        })
+    }
   }
 
   function getInfo(): TUserInfoType {
@@ -91,12 +111,13 @@ export default function useAuth() {
 
   return {
     auth: context.state.auth,
-    isAuthorized: context.state.isAuthorized,
-    isAdmin: context.state.isAdmin,
-    setAuthorization: setAuthorization,
     signUpUser: signUpUser,
     signInUser: signInUser,
     signOutUser: signOutUser,
+    getIsAuthorized: getIsAuthorized,
+    setIsAuthorized: setIsAuthorized,
+    getIsAdmin: getIsAdmin,
+    setIsAdmin: setIsAdmin,
     getUID: getUID,
     getInfo: getInfo,
     setInfo: setInfo,

@@ -1,4 +1,4 @@
-import type { Auth } from 'firebase/auth'
+import type { Auth } from "firebase/auth"
 
 /**
  * Auth context state type.
@@ -10,19 +10,25 @@ export type TAuthContextState = {
 }
 
 /**
- * Reducer action type for Firebase Auth.
- */
-type TAuthReducerSetAuth = {
-  type: 'SET_FIREBASE_AUTH'
-  payload: Auth
-}
-
-/**
  * Authorization context payload
  */
 export type TAuthorizationPayload = {
   isAuthorized: boolean
+}
+
+/**
+ * Admin context payload
+ */
+export type TAdminPayload = {
   isAdmin: boolean
+}
+
+/**
+ * Reducer action type for Firebase Auth.
+ */
+type TAuthReducerSetAuth = {
+  type: "SET_FIREBASE_AUTH"
+  payload: Auth
 }
 
 /**
@@ -30,14 +36,23 @@ export type TAuthorizationPayload = {
  * This state is set in AuthProvider on initial launch.
  */
 type TAuthReducerSetAuthorized = {
-  type: 'SET_AUTHORIZATION'
+  type: "SET_AUTHORIZATION"
   payload: TAuthorizationPayload
+}
+
+/**
+ * Reducer action type for admin or not.
+ * This state is set in AuthProvider on initial launch.
+ */
+type TAuthReducerSetAdmin = {
+  type: "SET_IS_ADMIN"
+  payload: TAdminPayload
 }
 
 /**
  * Combined reducer actions for AuthReducer.
  */
-export type TAuthReducerActions = TAuthReducerSetAuth | TAuthReducerSetAuthorized
+export type TAuthReducerActions = TAuthReducerSetAuth | TAuthReducerSetAuthorized | TAuthReducerSetAdmin
 
 /**
  * Context provider type for AuthProviderContext.

@@ -17,24 +17,26 @@ import AppModules from "../admin/app-modules"
 import useAuth from "@/hooks/useAuth"
 
 export default function Router() {
-  const { isAuthorized } = useAuth()
+  const { getIsAuthorized, getIsAdmin } = useAuth()
 
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
-          <Route element={<ProtectedRoute isAuthorized={!isAuthorized} redirectPath="/" />}>
+          <Route element={<ProtectedRoute isAuthorized={!getIsAuthorized()} redirectPath="/" />}>
             <Route path="signin" element={<SignInUser />} />
             <Route path="signup" element={<SignUpUser />} />
           </Route>
-          <Route element={<ProtectedRoute isAuthorized={isAuthorized} redirectPath="/" />}>
+          <Route element={<ProtectedRoute isAuthorized={getIsAuthorized()} redirectPath="/" />}>
             <Route path="user" element={<UserProfile />} />
             <Route path="bookmarker" element={<Bookmarker />} />
             <Route path="movies" element={<Movies />} />
             <Route path="cryptopass" element={<CryptoPass />} />
             <Route path="mylist" element={<MyList />} />
             <Route path="notes" element={<Notes />} />
+          </Route>
+          <Route element={<ProtectedRoute isAuthorized={getIsAuthorized() && getIsAdmin()} redirectPath="/" />}>
             <Route path="appmodules" element={<AppModules />} />
           </Route>
         </Route>

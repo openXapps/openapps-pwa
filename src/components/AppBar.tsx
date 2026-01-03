@@ -10,7 +10,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSepara
 import { useState } from "react"
 
 export default function AppBar() {
-  const { auth, isAuthorized, setAuthorized, signOutUser } = useAuth()
+  const { auth, signOutUser, getIsAuthorized, getIsAdmin, getInfo } = useAuth()
   const { theme, setTheme } = useTheme()
   const [isBusy, setIsBusy] = useState(false)
   const rrNavigate = useNavigate()
@@ -19,7 +19,6 @@ export default function AppBar() {
     setIsBusy(true)
     try {
       await signOutUser(auth)
-      setAuthorized(false)
       setIsBusy(false)
     } catch (error) {
       console.log("Sign out error")
@@ -40,7 +39,8 @@ export default function AppBar() {
           <img className="w-6" src={logo} alt="openapps logo" />
           <h1 className="text-xl font-bold tracking-wide">OpenApps</h1>
         </div>
-        <div className="flex gap-2">
+        <div className="flex gap-2 items-center">
+          {getIsAuthorized() && <p>{getInfo().displayName}</p>}
           <Button variant="ghost" size="icon" onClick={toggleTheme}><Sun /></Button>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -51,13 +51,16 @@ export default function AppBar() {
               ><UserRound /><span className="sr-only">open menu</span></Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-32">
-              <DropdownMenuItem disabled={isAuthorized || isBusy} onClick={() => rrNavigate("/signin")}
+              <DropdownMenuItem disabled={getIsAuthorized() || isBusy} onClick={() => rrNavigate("/signin")}
               >Sign In<span className="sr-only">menu sign in</span></DropdownMenuItem>
-              <DropdownMenuItem disabled={!isAuthorized || isBusy} onClick={handleSignUserOut}>
+              <DropdownMenuItem disabled={!getIsAuthorized() || isBusy} onClick={handleSignUserOut}>
                 Sign Out<span className="sr-only">menu sign out</span></DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem disabled={!isAuthorized || isBusy} onClick={() => rrNavigate("/user")}
+              <DropdownMenuItem disabled={!getIsAuthorized() || isBusy} onClick={() => rrNavigate("/user")}
               >View Profile<span className="sr-only">menu user profile</span></DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem disabled={!getIsAuthorized() || !getIsAdmin() || isBusy} onClick={() => rrNavigate("/appmodules")}
+              >Administration<span className="sr-only">menu user admin</span></DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>

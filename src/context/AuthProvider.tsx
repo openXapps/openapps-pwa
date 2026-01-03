@@ -31,26 +31,27 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    function checkIfAdmin(): boolean {
-      let result = false
+    function checkIfAdmin(): void {
       if (auth.currentUser) {
-        auth.currentUser?.getIdTokenResult(false)
+        auth.currentUser.getIdTokenResult(false)
           .then(data => {
             const claims: ParsedToken = data.claims
-            console.log("claimes:", claims)
-            if ("admin" in claims) if (claims["admin"] === true) result = true
+            // console.log("claimes:", claims)
+            if ("admin" in claims) if (claims["admin"]) {
+              dispatch({ type: "SET_IS_ADMIN", payload: { isAdmin: true } })
+            }
           })
-        console.log("in Promise:", result)
+      } else {
+        dispatch({ type: "SET_IS_ADMIN", payload: { isAdmin: false } })
       }
-      console.log("after Promise:", result)
-      return result
     }
 
     const unsubscribe = state.auth.onAuthStateChanged(user => {
       // console.log("onAuthStateChanged triggered (auth): ", state.auth);
       // console.log("onAuthStateChanged triggered (user): ", user);
       setLoading(false)
-      dispatch({ type: "SET_AUTHORIZATION", payload: { isAuthorized: user != null, isAdmin: checkIfAdmin() } })
+      dispatch({ type: "SET_AUTHORIZATION", payload: { isAuthorized: user != null } })
+      checkIfAdmin()
     })
     return unsubscribe
   }, [])

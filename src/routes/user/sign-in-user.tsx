@@ -14,7 +14,7 @@ const testPass = "password"
 
 export default function SignInUser() {
   const rrNavigate = useNavigate()
-  const { signInUser, setAuthorized, isAuthorized } = useAuth()
+  const { signInUser, setIsAuthorized, getIsAuthorized, setIsAdmin } = useAuth()
   const username = useRef<HTMLInputElement | null>(null)
   const password = useRef<HTMLInputElement | null>(null)
   const [isError, setIsError] = useState(isErrorInit)
@@ -27,7 +27,8 @@ export default function SignInUser() {
       try {
         await signInUser(username.current.value, password.current.value)
         isError && setIsError(isErrorInit)
-        setAuthorized(true)
+        setIsAuthorized(true)
+        setIsAdmin()
         rrNavigate("/", { replace: true })
       } catch (error) {
         setIsError({ status: true, message: "Sign in error, try again" })
@@ -63,14 +64,14 @@ export default function SignInUser() {
             type="password"
             placeholder="password" />
           <div className="flex gap-2">
-            <Button disabled={isBusy || isAuthorized} className="" onClick={handleSignInUser} type="submit">Sign In</Button>
-            <Button disabled={isBusy || isAuthorized} className="" onClick={handleClearFields} type="button">Clear</Button>
+            <Button disabled={isBusy || getIsAuthorized()} className="" onClick={handleSignInUser} type="submit">Sign In</Button>
+            <Button disabled={isBusy || getIsAuthorized()} className="" onClick={handleClearFields} type="button">Clear</Button>
             <Button disabled={isBusy} className="" onClick={() => rrNavigate(-1)} type="button">Cancel</Button>
           </div>
         </div>
       </form>
       {isError.status && <p className="text-red-400 mt-3">{isError.message}</p>}
-      {isAuthorized && <p className="text-green-400 mt-3">You authorized</p>}
+      {getIsAuthorized() && <p className="text-green-400 mt-3">You authorized</p>}
     </div>
   )
 }
