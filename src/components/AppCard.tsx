@@ -15,9 +15,9 @@ export default function AppCard({ app, enabled }: { app: SAppModule, enabled: bo
     >
       <h1 className="text-xl font-bold font-mono">{app.moduleName}</h1>
       <p className="font-mono">{app.moduleDesc}</p>
-      <p className="font-mono">Created: {app.updatedAt.toDateString()}</p>
+      {/* <p className="font-mono">Created: {app.updatedAt.toDateString()}</p>
       <p className="font-mono">Updated: {app.createdAt.toDateString()}</p>
-      <p className="font-mono">ID: {app.id}</p>
+      <p className="font-mono">ID: {app.id}</p> */}
     </Link>
   )
 }

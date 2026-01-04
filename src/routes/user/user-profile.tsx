@@ -59,8 +59,8 @@ export default function UserProfile() {
   }
 
   return (
-    <div className="p-3 space-y-3">
-      <p className="font-bold">User Information</p>
+    <div className="mx-3 mb-3 space-y-3">
+      <p className="font-bold">My User Profile</p>
       <p>{getUID()}</p>
       <form className="space-y-2" onSubmit={handleUpdateUser}>
         <Input ref={nameRef} type="text" placeholder="Display name" defaultValue={getInfo().displayName || undefined} />

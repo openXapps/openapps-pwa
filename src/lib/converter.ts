@@ -24,13 +24,13 @@ function createConverter<T extends SFirestoreExtention>(): FirestoreDataConverte
       const data = snapshot.data(options)!
       // console.log("From FB:", data);
 
-      // Convert the data back to the type T and add the document ID
+      // Convert the data back to the type T and add extention fields
       return {
         ...data,
         id: snapshot.id, // Inject the document ID here
         createdAt: data.createdAt ? data.createdAt.toDate() : new Date(),
         updatedAt: data.updatedAt ? data.updatedAt.toDate() : new Date(),
-        isActive: true,
+        // isActive: snapshot.isActive,
       } as T
     },
 
@@ -60,7 +60,7 @@ function createConverter<T extends SFirestoreExtention>(): FirestoreDataConverte
           ...data,
           createdAt: serverTimestamp(),
           updatedAt: serverTimestamp(),
-          isActive: true,
+          isActive: isActive,
         }
       }
     }

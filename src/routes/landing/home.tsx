@@ -49,7 +49,7 @@ export default function Home() {
           ? (<Loader varient="SCREEN" />)
           : (
             appModules?.payload.map(v => (
-              <AppCard key={v.id} app={v} enabled={cookiesAccepted} />
+              v.isActive && <AppCard key={v.id} app={v} enabled={cookiesAccepted} />
             ))
           )
         }
