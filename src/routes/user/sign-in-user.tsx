@@ -48,7 +48,7 @@ export default function SignInUser() {
   }
 
   return (
-    <div className="max-w-md mx-auto p-3">
+    <div className="max-w-md mx-auto px-3 md:px-0">
       <h1 className="font-bold mb-3">Sign In</h1>
       <form action="" onSubmit={handleSignInUser}>
         <div className="flex flex-col gap-3">

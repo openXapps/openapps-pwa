@@ -13,12 +13,17 @@ const cookieName = "openapps_accept_t&c"
 
 export default function Home() {
   const { isLoading, getAllDocuments } = useFirestore()
-  const [appModules, setAppModules] = useState<TGetAllDocumentsProps<SAppModule>>()
+  const [appModules, setAppModules] = useState<SAppModule[]>([])
   const [cookiesAccepted, setCookiesAccepted] = useState(true)
+  const [isError, setIsError] = useState({ ok: true, message: "" })
 
   async function fetchData() {
     const data: TGetAllDocumentsProps<SAppModule> = await getAllDocuments("/appModules/", appModuleConverter)
-    setAppModules(data)
+    if (data.ok) {
+      setAppModules(data.payload.sort((a, b) => (a.order || 100) - (b.order || 100)))
+    } else {
+      setIsError({ ok: false, message: `Oops! Looks like we cannot reach the cloud. ${data.message}` })
+    }
   }
 
   useEffect(() => {
@@ -48,9 +53,11 @@ export default function Home() {
         {isLoading
           ? (<Loader varient="SCREEN" />)
           : (
-            appModules?.payload.map(v => (
-              v.isActive && <AppCard key={v.id} app={v} enabled={cookiesAccepted} />
-            ))
+            !isError.ok
+              ? (<p className="w-full text-center p-3">{isError.message}</p>)
+              : (appModules.map(v => (
+                v.isActive && <AppCard key={v.id} app={v} enabled={cookiesAccepted} />
+              )))
           )
         }
       </div>

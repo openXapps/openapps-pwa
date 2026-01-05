@@ -63,14 +63,17 @@ export default function AppBar() {
               <DropdownMenuContent align="end" className="w-32">
                 <DropdownMenuItem disabled={getIsAuthorized() || isBusy} onClick={() => rrNavigate("/signin")}
                 >Sign In<span className="sr-only">menu sign in</span></DropdownMenuItem>
-                <DropdownMenuItem disabled={!getIsAuthorized() || isBusy} onClick={handleSignUserOut}>
-                  Sign Out<span className="sr-only">menu sign out</span></DropdownMenuItem>
+                <DropdownMenuItem disabled={getIsAuthorized() || isBusy} onClick={() => rrNavigate("/signup")}
+                >Sign Up<span className="sr-only">menu sign up</span></DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem disabled={!getIsAuthorized() || isBusy} onClick={() => rrNavigate("/user")}
                 >View Profile<span className="sr-only">menu user profile</span></DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem disabled={!getIsAuthorized() || !getIsAdmin() || isBusy} onClick={() => rrNavigate("/appmodules")}
                 >Administration<span className="sr-only">menu user admin</span></DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem disabled={!getIsAuthorized() || isBusy} onClick={handleSignUserOut}
+                >Sign Out<span className="sr-only">menu sign out</span></DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           </div>

@@ -10,7 +10,7 @@ const isErrorInit: { status: boolean, message: string } = { status: false, messa
 
 export default function SignUpUser() {
   const rrNavigate = useNavigate()
-  const { signUpUser, setAuthorized, isAuthorized } = useAuth()
+  const { signUpUser, setIsAuthorized, getIsAuthorized } = useAuth()
   const username = useRef<HTMLInputElement | null>(null)
   const password = useRef<HTMLInputElement | null>(null)
   const [isError, setIsError] = useState(isErrorInit)
@@ -23,7 +23,7 @@ export default function SignUpUser() {
       try {
         await signUpUser(username.current.value, password.current.value)
         isError && setIsError(isErrorInit)
-        setAuthorized(true)
+        setIsAuthorized(true)
         rrNavigate("/", { replace: true })
       } catch (error) {
         setIsError({ status: true, message: "Sign up error, try again" })
@@ -39,11 +39,11 @@ export default function SignUpUser() {
     if (username.current != undefined) username.current.value = ""
     if (password.current != undefined) password.current.value = ""
     setIsError(isErrorInit)
-    username.current?.focus()
+    // username.current?.focus()
   }
 
   return (
-    <div className="max-w-md mx-auto p-3">
+    <div className="max-w-md mx-auto px-3 md:px-0">
       <h1 className="font-bold mb-3">Sign Up</h1>
       <form action="" onSubmit={handleSignUpUser}>
         <div className="flex flex-col gap-3">
@@ -51,21 +51,21 @@ export default function SignUpUser() {
             defaultValue=""
             ref={username}
             type="email"
-            placeholder="username" />
+            placeholder="email" />
           <Input
             defaultValue=""
             ref={password}
             type="password"
             placeholder="password" />
           <div className="flex gap-2">
-            <Button disabled={isBusy || isAuthorized} className="" onClick={handleSignUpUser} type="submit">Sign Up</Button>
-            <Button disabled={isBusy || isAuthorized} className="" onClick={handleClearFields} type="button">Clear</Button>
+            <Button disabled={isBusy || getIsAuthorized()} className="" onClick={handleSignUpUser} type="submit">Sign Up</Button>
+            <Button disabled={isBusy || getIsAuthorized()} className="" onClick={handleClearFields} type="button">Clear</Button>
             <Button disabled={isBusy} className="" onClick={() => rrNavigate(-1)} type="button">Cancel</Button>
           </div>
         </div>
       </form>
       {isError.status && <p className="text-red-400 mt-3">{isError.message}</p>}
-      {isAuthorized && <p className="text-green-400 mt-3">You authorized</p>}
+      {getIsAuthorized() && <p className="text-green-400 mt-3">You authorized</p>}
     </div>
   )
 }

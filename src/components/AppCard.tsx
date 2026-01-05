@@ -9,7 +9,7 @@ export default function AppCard({ app, enabled }: { app: SAppModule, enabled: bo
       className={twMerge(enabled
         ? "hover:bg-slate-400 dark:hover:bg-slate-700"
         : "pointer-events-none cursor-default text-gray-300 dark:text-muted",
-        "p-4 text-center rounded-xl"
+        "mx-3 p-2 text-center rounded-xl border"
       )}
       to={app.url}
     >
