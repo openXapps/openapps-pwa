@@ -8,6 +8,7 @@ import type { TGetAllDocumentsProps } from "@/types/firestore-types"
 import useFirestore from "@/hooks/useFirestore"
 import { appModuleConverter } from "@/lib/converter"
 import Loader from "@/components/Loader"
+import { Button } from "@/components/ui/button"
 
 const cookieName = "openapps_accept_t&c"
 
@@ -54,7 +55,12 @@ export default function Home() {
           ? (<Loader varient="SCREEN" />)
           : (
             !isError.ok
-              ? (<p className="w-full text-center p-3">{isError.message}</p>)
+              ? (
+                <div className="flex flex-col gap-6 mt-3 mx-auto">
+                  <p className="">{isError.message}</p>
+                  <Button variant="outline" onClick={() => window.location.reload()}>Lets reload the page</Button>
+                </div>
+              )
               : (appModules.map(v => (
                 v.isActive && <AppCard key={v.id} app={v} enabled={cookiesAccepted} />
               )))
