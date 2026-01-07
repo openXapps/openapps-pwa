@@ -1,4 +1,4 @@
-import { Button } from "./ui/button"
+import { Button } from "@/components/ui/button"
 
 const Cookie = () => {
   return (
@@ -24,7 +24,7 @@ const Github = () => {
   return (
     <a
       className="underline"
-      href="https://github.com/openXapps/web-apps-home"
+      href="https://github.com/openXapps/openapps-pwa"
       target="_blank"
       rel="noopener noreferrer"
     >GitHub</a>
@@ -34,16 +34,16 @@ const Github = () => {
 const emojis = { grinningFaceWithBigEyes: "😃" }
 
 type DisclaimerProps = {
-  cookiesAccepted: boolean
+  cookieAccepted: boolean
   handleAcceptCookies: () => void
 }
 
-export default function Disclaimer({ cookiesAccepted, handleAcceptCookies }: DisclaimerProps) {
+export default function Disclaimer({ cookieAccepted, handleAcceptCookies }: DisclaimerProps) {
   // export default function Disclaimer() {
   return (
     <div className="fixed left-0 bottom-0 w-full z-10 bg-muted">
       <div className="flex flex-col items-center text-center p-3 mx-2 gap-3">
-        {cookiesAccepted ? (
+        {cookieAccepted ? (
           <p><span className="font-bold">No ads!</span> <span>{emojis.grinningFaceWithBigEyes}</span> Visit me on <Github /></p>
         ) : (
           <div className="opacity-60 space-y-2">

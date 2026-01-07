@@ -44,6 +44,8 @@
   --color-sidebar-ring: var(--sidebar-ring);
 }
 
+/* --background: linear-gradient(145deg, #57575c, #0c0c0d) no-repeat fixed; */
+
 /* GRAY */
 :root {
   --radius: 0.625rem;

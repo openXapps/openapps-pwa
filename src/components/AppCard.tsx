@@ -3,10 +3,10 @@ import { twMerge } from "tailwind-merge"
 
 import type { SAppModule } from "@/schemas/app-schemas"
 
-export default function AppCard({ app, enabled }: { app: SAppModule, enabled: boolean }) {
+export default function AppCard({ app, cookieAccepted }: { app: SAppModule, cookieAccepted: boolean }) {
   return (
     <Link
-      className={twMerge(enabled
+      className={twMerge(cookieAccepted
         ? "hover:bg-slate-400 dark:hover:bg-slate-700"
         : "pointer-events-none cursor-default text-gray-300 dark:text-muted",
         "mx-3 p-2 text-center rounded-xl border"

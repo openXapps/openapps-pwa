@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react"
 
-import Disclaimer from "@/components/Disclaimer"
+import Disclaimer from "@/routes/landing/disclaimer"
 import AppCard from "@/components/AppCard"
 
 import type { SAppModule } from "@/schemas/app-schemas"
@@ -15,7 +15,7 @@ const cookieName = "openapps_accept_t&c"
 export default function Home() {
   const { isLoading, getAllDocuments } = useFirestore()
   const [appModules, setAppModules] = useState<SAppModule[]>([])
-  const [cookiesAccepted, setCookiesAccepted] = useState(true)
+  const [cookieAccepted, setCookiesAccepted] = useState(true)
   const [isError, setIsError] = useState({ ok: true, message: "" })
 
   async function fetchData() {
@@ -34,11 +34,11 @@ export default function Home() {
 
   useEffect(() => {
     const cookies = decodeURIComponent(document.cookie)
-    if (!cookiesAccepted && cookies.indexOf(cookieName + "=Yes") > -1) setCookiesAccepted(true)
-    if (cookiesAccepted && cookies.indexOf(cookieName + "=Yes") === -1) setCookiesAccepted(false)
+    if (!cookieAccepted && cookies.indexOf(cookieName + "=Yes") > -1) setCookiesAccepted(true)
+    if (cookieAccepted && cookies.indexOf(cookieName + "=Yes") === -1) setCookiesAccepted(false)
 
     return () => { }
-  }, [cookiesAccepted])
+  }, [cookieAccepted])
 
   const handleAcceptCookies = () => {
     let d = new Date()
@@ -62,12 +62,12 @@ export default function Home() {
                 </div>
               )
               : (appModules.map(v => (
-                v.isActive && <AppCard key={v.id} app={v} enabled={cookiesAccepted} />
+                v.isActive && <AppCard key={v.id} app={v} cookieAccepted={cookieAccepted} />
               )))
           )
         }
       </div>
-      <Disclaimer cookiesAccepted={cookiesAccepted} handleAcceptCookies={handleAcceptCookies} />
+      <Disclaimer cookieAccepted={cookieAccepted} handleAcceptCookies={handleAcceptCookies} />
     </>
   )
 }
