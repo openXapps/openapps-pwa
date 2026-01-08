@@ -24,6 +24,7 @@ import {
   DialogTrigger
 } from "@/components/ui/dialog"
 import { Textarea } from "@/components/ui/textarea"
+import useRouteContext from "@/hooks/useRouteContext"
 
 type Modes = "NEW" | "SET"
 
@@ -40,6 +41,7 @@ const initCurrentAppModule: SAppModule = {
 
 export default function AppModules() {
   const { isLoading, getAllDocuments, addDocument, setDocument, deleteDocument } = useFirestore()
+  const {setRouteId} = useRouteContext()
   const [currentAppModule, setCurrentAppModule] = useState<SAppModule>(initCurrentAppModule)
   const moduleNameRef = useRef<HTMLInputElement>(null)
   const moduleDescRef = useRef<HTMLTextAreaElement>(null)
@@ -58,6 +60,7 @@ export default function AppModules() {
 
   useEffect(() => {
     fetchData()
+    setRouteId("admin-modules")
 
     return () => { }
   }, [])
@@ -138,7 +141,7 @@ export default function AppModules() {
         <form className="flex gap-5 justify-between items-center border border-slate-400 rounded-lg p-3" action="" onSubmit={handleSaveModule}>
           <div className="space-y-2 w-full">
             <Input className="" ref={moduleNameRef} placeholder="Module name" />
-            <Textarea className="" ref={moduleDescRef} placeholder="Module description" rows={2} />
+            <Textarea className="field-sizing-content" ref={moduleDescRef} placeholder="Module description" />
             <Input className="" ref={moduleURLRef} placeholder="Module URL" />
             <Input type="number" className="" ref={moduleOrderRef} placeholder="Module sort order" />
             <div className="flex items-center space-x-3 border py-2 pl-3 rounded-sm">
@@ -176,7 +179,7 @@ export default function AppModules() {
             <div key={v.id} className={twMerge(v.isActive === false && "bg-orange-100 dark:bg-orange-950", "flex flex-row justify-between mt-3 p-2 border border-orange-800 rounded-lg")}>
               <div className="space-y-1">
                 <p className="font-bold">{v.moduleName}</p>
-                <p>{v.moduleDesc || "No description"}</p>
+                <p className="line-clamp-3">{v.moduleDesc || "No description"}</p>
                 <p>URL: {v.url}</p>
                 <p>Active: {v.isActive === true ? "YES" : "NO"}</p>
                 <p>Sort order: {v.order}</p>

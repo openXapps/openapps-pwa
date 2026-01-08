@@ -14,9 +14,11 @@ import {
 import { Button } from "./ui/button"
 import { ArrowLeft, Sun, UserRound, } from "lucide-react"
 import logo from "@/assets/logo.svg"
+import useRouteContext from "@/hooks/useRouteContext"
 
 export default function AppBar() {
   const { auth, signOutUser, getIsAuthorized, getIsAdmin, getInfo } = useAuth()
+  const { routeContext, getTitle } = useRouteContext()
   const { theme, setTheme } = useTheme()
   const [isBusy, setIsBusy] = useState(false)
   const rrNavigate = useNavigate()
@@ -39,6 +41,8 @@ export default function AppBar() {
       : setTheme("dark")
   }
 
+  console.log("Currentroute is:", routeContext.routeState.routeId)
+
   return (
     <div className="fixed left-0 top-0 w-full z-10 bg-muted">
       <div className="max-w-5xl mx-auto flex justify-between items-center p-3">
@@ -46,7 +50,7 @@ export default function AppBar() {
           <Link to="/">
             <img className="w-6" src={logo} alt="openapps logo" />
           </Link>
-          <h1 className="text-xl font-bold tracking-wide">OpenApps</h1>
+          <h1 className="text-xl font-bold tracking-wide">{getTitle(routeContext.routeState.routeId)}</h1>
         </div>
         {rrLocation.pathname === "/" ? (
           <div className="flex gap-1 items-center">
