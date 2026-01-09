@@ -43,8 +43,8 @@ export default function SignUpUser() {
   }
 
   return (
-    <div className="max-w-md mx-auto px-3 md:px-0">
-      <h1 className="font-bold mb-3">Sign Up</h1>
+    <div className="max-w-md mx-auto space-y-3 px-3 sm:px-0">
+      <p className="">Welcome to OpenApps. Please provide an email and password to sign-up for an account.</p>
       <form action="" onSubmit={handleSignUpUser}>
         <div className="flex flex-col gap-3">
           <Input

@@ -9,12 +9,12 @@ export default function useRouteContext() {
     throw new Error("useRouteContext must be used within a RouteProvider")
   }
 
+  /**
+   * Function to set routerContext to specified route
+   * @param routeId The router path value
+   */
   function setRouteId(routeId: string): void {
     routeContext.routeDispatch({ type: "SET_ROUTE_ID", payload: routeId })
-  }
-
-  function getPath(routeId: string): string {
-    return routes.find(v => v.routeId === routeId)?.routePath || ""
   }
 
   function getTitle(routeId: string): string {
@@ -24,7 +24,6 @@ export default function useRouteContext() {
   return {
     routeContext: routeContext,
     setRouteId: setRouteId,
-    getPath: getPath,
     getTitle: getTitle
   }
 }

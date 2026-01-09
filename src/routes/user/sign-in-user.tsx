@@ -48,8 +48,8 @@ export default function SignInUser() {
   }
 
   return (
-    <div className="max-w-md mx-auto px-3 md:px-0">
-      <h1 className="font-bold mb-3">Sign In</h1>
+    <div className="max-w-md mx-auto space-y-3 px-3 sm:px-0">
+      <p className="">Welcome to OpenApps. Please provide an email and password to sign-in.</p>
       <form action="" onSubmit={handleSignInUser}>
         <div className="flex flex-col gap-3">
           <Input

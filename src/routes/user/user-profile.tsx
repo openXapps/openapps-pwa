@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 
 import useAuth from '@/hooks/useAuth'
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 
 // https://picsum.photos/
 
@@ -60,8 +61,7 @@ export default function UserProfile() {
 
   return (
     <div className="mx-3 mb-3 space-y-3">
-      <p className="font-bold">My User Profile</p>
-      <p>{getUID()}</p>
+      <p className="">View or amend your user profile data.</p>
       <form className="space-y-2" onSubmit={handleUpdateUser}>
         <Input ref={nameRef} type="text" placeholder="Display name" defaultValue={getInfo().displayName || undefined} />
         <Input ref={photoRef} type="url" placeholder="Photo URL" defaultValue={getInfo().photoURL || undefined} />
@@ -75,6 +75,11 @@ export default function UserProfile() {
       </div>
       <p>Email validated: {getInfo().emailVerified ? 'YES' : 'NO'}</p>
       <p>Administrator: {getIsAdmin() ? 'YES' : 'NO'}</p>
+      <p>{getUID()}</p>
+      <Avatar>
+        <AvatarImage src={getInfo().photoURL || undefined} alt={getInfo().email || undefined} />
+        <AvatarFallback>CN</AvatarFallback>
+      </Avatar>
     </div>
   )
 }

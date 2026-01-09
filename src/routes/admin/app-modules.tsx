@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Switch } from "@/components/ui/switch"
 import { Label } from "@/components/ui/label"
+import { Textarea } from "@/components/ui/textarea"
 
 import { Pencil, Save, Trash2, Undo2 } from "lucide-react"
 import {
@@ -23,8 +24,6 @@ import {
   DialogTitle,
   DialogTrigger
 } from "@/components/ui/dialog"
-import { Textarea } from "@/components/ui/textarea"
-import useRouteContext from "@/hooks/useRouteContext"
 
 type Modes = "NEW" | "SET"
 
@@ -41,7 +40,6 @@ const initCurrentAppModule: SAppModule = {
 
 export default function AppModules() {
   const { isLoading, getAllDocuments, addDocument, setDocument, deleteDocument } = useFirestore()
-  const {setRouteId} = useRouteContext()
   const [currentAppModule, setCurrentAppModule] = useState<SAppModule>(initCurrentAppModule)
   const moduleNameRef = useRef<HTMLInputElement>(null)
   const moduleDescRef = useRef<HTMLTextAreaElement>(null)
@@ -60,7 +58,6 @@ export default function AppModules() {
 
   useEffect(() => {
     fetchData()
-    setRouteId("admin-modules")
 
     return () => { }
   }, [])
@@ -134,9 +131,8 @@ export default function AppModules() {
   }
 
   return (
-    <div className="mx-3 mb-3 space-y-3">
-      <p className="font-bold">App Modules</p>
-
+    <div className="mx-auto max-w-screen-sm px-3 sm:px-0 mb-3 space-y-3">
+      <p className="">Configure OpenApps web modules.</p>
       <div className="">
         <form className="flex gap-5 justify-between items-center border border-slate-400 rounded-lg p-3" action="" onSubmit={handleSaveModule}>
           <div className="space-y-2 w-full">

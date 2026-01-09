@@ -1,18 +1,27 @@
 export type TRoutes = {
   routeId: string
-  routePath: string
   routeTitle: string
 }
 
 export const routes: TRoutes[] = [
   {
-    routeId: "home",
-    routePath: "/",
+    routeId: "/",
     routeTitle: "OpenApps",
   },
   {
-    routeId: "admin-modules",
-    routePath: "appmodules",
-    routeTitle: "Admin: Modules",
+    routeId: "/appmodules",
+    routeTitle: "Module Administration",
+  },
+  {
+    routeId: "/user",
+    routeTitle: "My User profile",
+  },
+  {
+    routeId: "/signin",
+    routeTitle: "Sign In",
+  },
+  {
+    routeId: "/signup",
+    routeTitle: "Sign Up",
   },
 ]

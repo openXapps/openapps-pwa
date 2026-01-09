@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Link, useLocation, useNavigate } from "react-router"
 
 import useAuth from "@/hooks/useAuth"
@@ -17,12 +17,20 @@ import logo from "@/assets/logo.svg"
 import useRouteContext from "@/hooks/useRouteContext"
 
 export default function AppBar() {
-  const { auth, signOutUser, getIsAuthorized, getIsAdmin, getInfo } = useAuth()
-  const { routeContext, getTitle } = useRouteContext()
-  const { theme, setTheme } = useTheme()
-  const [isBusy, setIsBusy] = useState(false)
   const rrNavigate = useNavigate()
   const rrLocation = useLocation()
+  const { routeContext, getTitle } = useRouteContext()
+  const { auth, signOutUser, getIsAuthorized, getIsAdmin, getInfo } = useAuth()
+  const { setRouteId } = useRouteContext()
+  const { theme, setTheme } = useTheme()
+  const [isBusy, setIsBusy] = useState(false)
+
+  useEffect(() => {
+    console.log(rrLocation.pathname)
+    setRouteId(rrLocation.pathname)
+
+    return () => { }
+  }, [rrLocation.pathname])
 
   const handleSignUserOut = async () => {
     setIsBusy(true)
@@ -41,7 +49,7 @@ export default function AppBar() {
       : setTheme("dark")
   }
 
-  console.log("Currentroute is:", routeContext.routeState.routeId)
+  console.log("Route Context:", routeContext.routeState)
 
   return (
     <div className="fixed left-0 top-0 w-full z-10 bg-muted">
