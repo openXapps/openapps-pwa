@@ -49,7 +49,7 @@ export default function AppBar() {
       : setTheme("dark")
   }
 
-  console.log("Route Context:", routeContext.routeState)
+  // console.log("Route Context:", routeContext.routeState)
 
   return (
     <div className="fixed left-0 top-0 w-full z-10 bg-muted">

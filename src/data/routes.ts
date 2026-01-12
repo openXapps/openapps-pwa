@@ -24,4 +24,8 @@ export const routes: TRoutes[] = [
     routeId: "/signup",
     routeTitle: "Sign Up",
   },
+  {
+    routeId: "/ts-and-cs",
+    routeTitle: "Terms and Conditions",
+  },
 ]

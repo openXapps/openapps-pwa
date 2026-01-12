@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button"
+import { Link } from "react-router"
 
 const Cookie = () => {
   return (
@@ -30,6 +31,16 @@ const Github = () => {
     >GitHub</a>
   )
 }
+const TsCs = () => {
+  return (
+    <Link
+      className="underline"
+      to="/ts-and-cs"
+      // target="_blank"
+      // rel="noopener noreferrer"
+    >Terms and Conditions</Link>
+  )
+}
 
 const emojis = { grinningFaceWithBigEyes: "😃" }
 
@@ -47,7 +58,7 @@ export default function Disclaimer({ cookieAccepted, handleAcceptCookies }: Disc
           <p><span className="font-bold">No ads!</span> <span>{emojis.grinningFaceWithBigEyes}</span> Visit me on <Github /></p>
         ) : (
           <div className="opacity-60 space-y-2">
-            <p>This site makes use of <Cookie /> and <Storage /> to give you the best online experience. Do you accept?</p>
+            <p>This site makes use of <Cookie /> and <Storage /> to give you the best online experience. Please read the <TsCs />. Do you accept?</p>
             <Button variant="default" className="rounded-md" onClick={handleAcceptCookies}>Yes I do</Button>
             <p>This message will be removed for 30 days once accepted</p>
           </div>

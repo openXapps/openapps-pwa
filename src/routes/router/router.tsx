@@ -12,7 +12,8 @@ import Bookmarker from "@/routes/bookmarker/placeholder"
 import CryptoPass from "@/routes/cryptopass/placeholder"
 import MyList from "@/routes/mylist/placeholder"
 import Notes from "@/routes/notes/placeholder"
-import AppModules from "../admin/app-modules"
+import AppModules from "@/routes/admin/app-modules"
+import TsAndCs from "@/routes/landing/ts-and-cs"
 
 import useAuth from "@/hooks/useAuth"
 
@@ -27,6 +28,7 @@ export default function Router() {
           <Route element={<ProtectedRoute isAuthorized={!getIsAuthorized()} redirectPath="/" />}>
             <Route path="signin" element={<SignInUser />} />
             <Route path="signup" element={<SignUpUser />} />
+            <Route path="ts-and-cs" element={<TsAndCs />} />
           </Route>
           <Route element={<ProtectedRoute isAuthorized={getIsAuthorized()} redirectPath="/" />}>
             <Route path="user" element={<UserProfile />} />
