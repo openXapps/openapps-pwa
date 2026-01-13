@@ -25,7 +25,7 @@ export const routes: TRoutes[] = [
     routeTitle: "Sign Up",
   },
   {
-    routeId: "/ts-and-cs",
-    routeTitle: "Terms and Conditions",
+    routeId: "/xx",
+    routeTitle: "xx",
   },
 ]
