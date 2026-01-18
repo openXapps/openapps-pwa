@@ -26,7 +26,7 @@ export default function AppBar() {
   const [isBusy, setIsBusy] = useState(false)
 
   useEffect(() => {
-    console.log(rrLocation.pathname)
+    // console.log(rrLocation.pathname)
     setRouteId(rrLocation.pathname)
 
     return () => { }
@@ -53,7 +53,7 @@ export default function AppBar() {
 
   return (
     <div className="fixed left-0 top-0 w-full z-10 bg-muted">
-      <div className="max-w-5xl mx-auto flex justify-between items-center p-3">
+      <div className="max-w-5xl mx-auto flex justify-between items-center p-2 md:p-3">
         <div className="flex items-center gap-2">
           <Link to="/">
             <img className="w-6" src={logo} alt="openapps logo" />
@@ -62,32 +62,29 @@ export default function AppBar() {
         </div>
         {rrLocation.pathname === "/" ? (
           <div className="flex gap-1 items-center">
-            {getIsAuthorized() && <p className="mr-1">{getInfo().displayName}</p>}
             <Button variant="outline" size="icon" onClick={toggleTheme}><Sun /></Button>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button
-                  variant="outline"
-                  className="data-[state=open]:text-muted-foreground"
-                  size="icon"
-                ><UserRound /><span className="sr-only">open menu</span></Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-32">
-                <DropdownMenuItem disabled={getIsAuthorized() || isBusy} onClick={() => rrNavigate("/signin")}
-                >Sign In<span className="sr-only">menu sign in</span></DropdownMenuItem>
-                <DropdownMenuItem disabled={getIsAuthorized() || isBusy} onClick={() => rrNavigate("/signup")}
-                >Sign Up<span className="sr-only">menu sign up</span></DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem disabled={!getIsAuthorized() || isBusy} onClick={() => rrNavigate("/user")}
-                >View Profile<span className="sr-only">menu user profile</span></DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem disabled={!getIsAuthorized() || !getIsAdmin() || isBusy} onClick={() => rrNavigate("/appmodules")}
-                >Administration<span className="sr-only">menu user admin</span></DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem disabled={!getIsAuthorized() || isBusy} onClick={handleSignUserOut}
-                >Sign Out<span className="sr-only">menu sign out</span></DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+            {getIsAuthorized() ? (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="outline"><span className="max-w-32 truncate">{getInfo().displayName}</span><span className="sr-only">open menu</span></Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-32">
+                  <DropdownMenuItem disabled={isBusy} onClick={() => rrNavigate("/user")}
+                  >View Profile<span className="sr-only">menu user profile</span></DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem disabled={!getIsAdmin() || isBusy} onClick={() => rrNavigate("/appmodules")}
+                  >Administration<span className="sr-only">menu user admin</span></DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem disabled={isBusy} onClick={handleSignUserOut}
+                  >Sign Out<span className="sr-only">menu sign out</span></DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            ) : (
+              <div className="space-x-1">
+                <Button variant="outline" onClick={() => rrNavigate("/signin")}>Sign In</Button>
+                <Button variant="outline" onClick={() => rrNavigate("/signup")}>Sign Up</Button>
+              </div>
+            )}
           </div>
         ) : (
           <Button variant="outline" size="icon" onClick={() => rrNavigate(-1)}><ArrowLeft /></Button>
