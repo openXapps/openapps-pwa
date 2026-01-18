@@ -56,8 +56,8 @@ export default function Home() {
           : (
             !isError.ok
               ? (
-                <div className="flex flex-col gap-6 mt-3 mx-auto">
-                  <p className="">{isError.message}</p>
+                <div className="flex flex-col gap-6 mt-3 mx-auto items-center">
+                  <p className="text-center">{isError.message}</p>
                   <Button variant="outline" onClick={() => window.location.reload()}>Lets reload the page</Button>
                 </div>
               )
