@@ -3,7 +3,7 @@ import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
 
-import TsAndCs from "./ts-and-cs"
+import TermsOfUse from "./terms-of-use"
 
 const emojis = { grinningFaceWithBigEyes: "😃" }
 
@@ -49,17 +49,17 @@ export default function Disclaimer({ cookieAccepted, handleAcceptCookies }: Disc
 
   return (
     <div className="fixed left-0 bottom-0 w-full z-10 bg-muted">
-      <div className="flex flex-col items-center text-center p-1 gap-3">
+      <div className="flex flex-col items-center p-1 gap-3">
         {cookieAccepted ? (
           <p><span className="font-bold">No ads!</span> <span>{emojis.grinningFaceWithBigEyes}</span> Visit me on <Github /></p>
         ) : (
           <>
-            {tcOpen && <TsAndCs coolBeans={setTcClicked} setTcOpen={setTcOpen} />}
+            {tcOpen && <TermsOfUse coolBeans={setTcClicked} setTcOpen={setTcOpen} />}
             {tcOpen && <Separator />}
-            <p>This site makes use of <Cookie /> and <Storage /> to give you the best online experience.</p>
+            <p className="text-center">This site makes use of <Cookie /> and <Storage /> to give you the best online experience.</p>
             {!tcOpen && <Button variant="outline" onClick={() => setTcOpen(true)}>Please read the Terms and Conditions</Button>}
             <Button variant="default" onClick={handleAcceptCookies} disabled={!tcClicked}>I Accept</Button>
-            <p>This message will be removed for 30 days once accepted</p>
+            <p className="text-center">This message will be removed for 30 days once accepted</p>
           </>
         )}
       </div>
