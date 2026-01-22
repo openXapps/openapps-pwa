@@ -3,6 +3,7 @@ import { useNavigate } from "react-router"
 
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
+import { Field, FieldDescription, FieldGroup, FieldLabel } from "@/components/ui/field"
 
 import useAuth from "@/hooks/useAuth"
 
@@ -35,37 +36,53 @@ export default function SignUpUser() {
     }
   }
 
-  const handleClearFields = () => {
-    if (username.current != undefined) username.current.value = ""
-    if (password.current != undefined) password.current.value = ""
-    setIsError(isErrorInit)
-    // username.current?.focus()
-  }
+  // const handleClearFields = () => {
+  //   if (username.current != undefined) username.current.value = ""
+  //   if (password.current != undefined) password.current.value = ""
+  //   setIsError(isErrorInit)
+  // }
 
   return (
     <div className="max-w-md mx-auto space-y-3 px-3 sm:px-0">
       <p className="">Welcome to OpenApps. Please provide an email and password to sign-up for an account.</p>
       <form action="" onSubmit={handleSignUpUser}>
-        <div className="flex flex-col gap-3">
-          <Input
-            defaultValue=""
-            ref={username}
-            type="email"
-            placeholder="email" />
-          <Input
-            defaultValue=""
-            ref={password}
-            type="password"
-            placeholder="password" />
-          <div className="flex gap-2">
-            <Button disabled={isBusy || getIsAuthorized()} className="" onClick={handleSignUpUser} type="submit">Sign Up</Button>
-            <Button disabled={isBusy || getIsAuthorized()} className="" onClick={handleClearFields} type="button">Clear</Button>
-            <Button disabled={isBusy} className="" onClick={() => rrNavigate(-1)} type="button">Cancel</Button>
-          </div>
-        </div>
+        <FieldGroup>
+          <Field>
+            <FieldLabel htmlFor="sign-up-email">Email</FieldLabel>
+            <Input
+              id="sign-up-email"
+              type="email"
+              placeholder="name@example.com"
+              required
+              ref={username}
+            />
+          </Field>
+          <Field>
+            <FieldLabel htmlFor="sign-up-password">Password</FieldLabel>
+            <Input
+              id="sign-up-password"
+              type="password"
+              required
+              ref={password}
+            />
+            <FieldDescription>Password must be minimum:
+              <ul className="pl-4">
+                <li>8 characters</li>
+                <li>1 or more uppercase</li>
+                <li>1 or more numbers</li>
+                <li>1 or more special characters</li>
+              </ul>
+            </FieldDescription>
+          </Field>
+          <Field>
+            <Button disabled={isBusy || getIsAuthorized()} type="submit">Create Account</Button>
+            <FieldDescription className="text-center">
+              By registering, you will automatically sign-in
+            </FieldDescription>
+          </Field>
+        </FieldGroup>
       </form>
       {isError.status && <p className="text-red-400 mt-3">{isError.message}</p>}
-      {getIsAuthorized() && <p className="text-green-400 mt-3">You authorized</p>}
     </div>
   )
 }

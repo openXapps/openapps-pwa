@@ -1,10 +1,11 @@
 import { useRef, useState } from "react"
-import { useNavigate } from "react-router"
+import { Link, useNavigate } from "react-router"
 
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 
 import useAuth from "@/hooks/useAuth"
+import { Field, FieldDescription, FieldGroup, FieldLabel } from "@/components/ui/field"
 
 const isErrorInit: { status: boolean, message: string } = { status: false, message: "" }
 
@@ -40,17 +41,17 @@ export default function SignInUser() {
     }
   }
 
-  const handleClearFields = () => {
-    if (username.current != undefined) username.current.value = ""
-    if (password.current != undefined) password.current.value = ""
-    setIsError(isErrorInit)
-    username.current?.focus()
-  }
+  // const handleClearFields = () => {
+  //   if (username.current != undefined) username.current.value = ""
+  //   if (password.current != undefined) password.current.value = ""
+  //   setIsError(isErrorInit)
+  //   username.current?.focus()
+  // }
 
   return (
     <div className="max-w-md mx-auto space-y-3 px-3 sm:px-0">
       <p className="">Welcome to OpenApps. Please provide an email and password to sign-in.</p>
-      <form action="" onSubmit={handleSignInUser}>
+      {/* <form action="" onSubmit={handleSignInUser}>
         <div className="flex flex-col gap-3">
           <Input
             defaultValue={testUser}
@@ -69,6 +70,42 @@ export default function SignInUser() {
             <Button disabled={isBusy} className="" onClick={() => rrNavigate(-1)} type="button">Cancel</Button>
           </div>
         </div>
+      </form> */}
+      <form action="" onSubmit={handleSignInUser}>
+        <FieldGroup>
+          <Field>
+            <FieldLabel htmlFor="sign-up-email">Email</FieldLabel>
+            <Input
+              id="sign-up-email"
+              defaultValue={testUser}
+              type="email"
+              placeholder="name@example.com"
+              required
+              ref={username}
+            />
+          </Field>
+          <Field>
+            <div className="flex items-center">
+              <FieldLabel htmlFor="sign-up-password">Password</FieldLabel>
+              {/* <Link to="/" className="ml-auto inline-block text-sm underline-offset-4 hover:underline"
+              >Forgot your password?</Link> */}
+            </div>
+            <Input
+              id="sign-up-password"
+              defaultValue={testPass}
+              type="password"
+              required
+              ref={password}
+            />
+            <FieldDescription>For now, if you forgot your password, it cannot be recovered</FieldDescription>
+          </Field>
+          <Field>
+            <Button disabled={isBusy || getIsAuthorized()} type="submit">Sign In</Button>
+            <FieldDescription className="text-center">
+              Don&apos;t have an account? <Link to="/signup">Sign up</Link>
+            </FieldDescription>
+          </Field>
+        </FieldGroup>
       </form>
       {isError.status && <p className="text-red-400 mt-3">{isError.message}</p>}
       {getIsAuthorized() && <p className="text-green-400 mt-3">You authorized</p>}

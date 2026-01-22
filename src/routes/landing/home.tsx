@@ -1,5 +1,8 @@
 import { useState, useEffect } from "react"
 
+import { Button } from "@/components/ui/button"
+import { Spinner } from "@/components/ui/spinner"
+
 import Disclaimer from "@/routes/landing/disclaimer"
 import AppCard from "@/components/AppCard"
 
@@ -7,8 +10,6 @@ import type { SAppModule } from "@/schemas/app-schemas"
 import type { TGetAllDocumentsProps } from "@/types/firestore-types"
 import useFirestore from "@/hooks/useFirestore"
 import { appModuleConverter } from "@/lib/converter"
-import Loader from "@/components/Loader"
-import { Button } from "@/components/ui/button"
 
 const cookieName = "openapps_accept_t&c"
 
@@ -52,7 +53,11 @@ export default function Home() {
     <>
       <div className="mx-auto max-w-screen-sm flex flex-col gap-3 md:gap-6 mb-15">
         {isLoading
-          ? (<Loader varient="SCREEN" />)
+          ? (
+            <div className="flex justify-center">
+              <Spinner className="size-15" />
+            </div>
+          )
           : (
             !isError.ok
               ? (

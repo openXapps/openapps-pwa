@@ -21,7 +21,7 @@ import type { TGetAllDocumentsProps, TGetDocumentProps } from "@/types/firestore
 
 export default function useFirestore() {
   const { db } = useFirestoreContext()
-  const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [isLoading, setIsLoading] = useState<boolean>(true)
 
   /**
    * Fetch a document from a collection
