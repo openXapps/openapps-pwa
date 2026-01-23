@@ -57,7 +57,10 @@ export default function Disclaimer({ cookieAccepted, handleAcceptCookies }: Disc
             {tcOpen && <TermsOfUse coolBeans={setTcClicked} setTcOpen={setTcOpen} />}
             {tcOpen && <Separator />}
             <p className="text-center">This site makes use of <Cookie /> and <Storage /> to give you the best online experience.</p>
-            {!tcOpen && <Button variant="outline" onClick={() => setTcOpen(true)}>Please read the Terms and Conditions</Button>}
+            {!tcOpen && <Button variant="outline" onClick={() => {
+              setTcClicked(false)
+              setTcOpen(true)
+            }}>Please read the Terms and Conditions</Button>}
             <Button variant="default" onClick={handleAcceptCookies} disabled={!tcClicked}>I Accept</Button>
             <p className="text-center">This message will be removed for 30 days once accepted</p>
           </>
