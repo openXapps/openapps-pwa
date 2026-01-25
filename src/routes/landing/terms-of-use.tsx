@@ -29,11 +29,11 @@ export default function TermsOfUse({ coolBeans, setTcOpen }: TsAndCsProps) {
 
   return (
     <div className="flex flex-col gap-3 items-center">
-      <h1 className="font-semibold">Terms of Use</h1>
+      <h1 className="font-semibold pt-2">Terms of Use</h1>
       {loading ? (<Spinner />) : (
-        // <div className="h-80 max-w-screen-sm max-h-100 sm:h-110 sm:max-h-120 md:max-h-150 overflow-y-auto">
-        <div className="h-80 max-w-screen-sm sm:h-120 md:h-120 overflow-y-auto">
-          <article className="prose prose-sm dark:prose-invert max-w-none p-2 bg-white dark:bg-black text-justify">
+        // <div className="h-80 max-w-screen-sm sm:h-120 md:h-120 overflow-y-auto">
+        <div className="h-[calc(100dvh-335px)] sm:h-[calc(100dvh-300px)] max-w-screen-sm md:max-w-3xl overflow-y-auto">
+          <article className="prose prose-sm dark:prose-invert max-w-none p-2 bg-white dark:bg-black text-justify font-mono text-sm">
             <Markdown remarkPlugins={[remarkGfm]}>{md}</Markdown>
           </article >
         </div>

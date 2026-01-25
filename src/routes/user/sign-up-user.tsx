@@ -65,17 +65,17 @@ export default function SignUpUser() {
               required
               ref={password}
             />
-            <FieldDescription>Password must be minimum:
-              <ul className="pl-4">
-                <li>8 characters</li>
-                <li>1 or more uppercase</li>
-                <li>1 or more numbers</li>
-                <li>1 or more special characters</li>
-              </ul>
-            </FieldDescription>
+            <p className="text-sm">Typical requirements for a "strong" password include:</p>
+            <ol className="text-sm">
+              <li>A minimum length (commonly 8 characters or more).</li>
+              <li>At least one uppercase letter.</li>
+              <li>At least one lowercase letter.</li>
+              <li>At least one number (digit).</li>
+              <li>At least one special character (e.g. !  @  #  $  %).</li>
+            </ol>
           </Field>
           <Field>
-            <Button disabled={isBusy || getIsAuthorized()} type="submit">Create Account</Button>
+            <Button disabled={isBusy || getIsAuthorized()} type="submit">Create a free account</Button>
             <FieldDescription className="text-center">
               By registering, you will automatically sign-in
             </FieldDescription>

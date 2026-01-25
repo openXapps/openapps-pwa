@@ -3,6 +3,7 @@ import { Link, useLocation, useNavigate } from "react-router"
 
 import useAuth from "@/hooks/useAuth"
 import useTheme from "@/hooks/useTheme"
+import useRouteContext from "@/hooks/useRouteContext"
 
 import {
   DropdownMenu,
@@ -12,9 +13,8 @@ import {
   DropdownMenuTrigger
 } from "./ui/dropdown-menu"
 import { Button } from "./ui/button"
-import { ArrowLeft, Sun, UserRound, } from "lucide-react"
+import { ArrowLeft, Sun } from "lucide-react"
 import logo from "@/assets/logo.svg"
-import useRouteContext from "@/hooks/useRouteContext"
 
 export default function AppBar() {
   const rrNavigate = useNavigate()
@@ -43,13 +43,20 @@ export default function AppBar() {
     }
   }
 
-  const toggleTheme = () => {
-    theme === "dark"
-      ? setTheme("light")
-      : setTheme("dark")
+  const toggleTheme = (): void => {
+    if (theme !== "system") {
+      theme === "dark" ? setTheme("light") : setTheme("dark")
+      return
+    }
+    if (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches) {
+      setTheme("light")
+      return
+    }
+    if (theme === "system" && !window.matchMedia("(prefers-color-scheme: dark)").matches) {
+      setTheme("dark")
+      return
+    }
   }
-
-  // console.log("Route Context:", routeContext.routeState)
 
   return (
     <div className="fixed left-0 top-0 w-full z-10 bg-muted">
@@ -58,7 +65,7 @@ export default function AppBar() {
           <Link to="/">
             <img className="w-6" src={logo} alt="openapps logo" />
           </Link>
-          <h1 className="text-xl font-bold tracking-wide">{getTitle(routeContext.routeState.routeId)}</h1>
+          <h1 className="sm:text-xl font-bold tracking-wide">{getTitle(routeContext.routeState.routeId)}</h1>
         </div>
         {rrLocation.pathname === "/" ? (
           <div className="flex gap-1 items-center">
