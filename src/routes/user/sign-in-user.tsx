@@ -51,26 +51,6 @@ export default function SignInUser() {
   return (
     <div className="max-w-md mx-auto space-y-3 px-3 sm:px-0">
       <p className="">Welcome to OpenApps. Please provide an email and password to sign-in.</p>
-      {/* <form action="" onSubmit={handleSignInUser}>
-        <div className="flex flex-col gap-3">
-          <Input
-            defaultValue={testUser}
-            ref={username}
-            type="email"
-            placeholder="username" />
-          <Input
-            defaultValue={testPass}
-            // id="password"
-            ref={password}
-            type="password"
-            placeholder="password" />
-          <div className="flex gap-2">
-            <Button disabled={isBusy || getIsAuthorized()} className="" onClick={handleSignInUser} type="submit">Sign In</Button>
-            <Button disabled={isBusy || getIsAuthorized()} className="" onClick={handleClearFields} type="button">Clear</Button>
-            <Button disabled={isBusy} className="" onClick={() => rrNavigate(-1)} type="button">Cancel</Button>
-          </div>
-        </div>
-      </form> */}
       <form action="" onSubmit={handleSignInUser}>
         <FieldGroup>
           <Field>

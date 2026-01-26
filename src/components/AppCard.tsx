@@ -1,9 +1,9 @@
+import { useState } from "react"
 import { Link } from "react-router"
 import { twMerge } from "tailwind-merge"
 
 import type { SAppModule } from "@/schemas/app-schemas"
-import { useState } from "react"
-import { Button } from "./ui/button"
+import { Button } from "@/components/ui/button"
 
 export default function AppCard({ app, cookieAccepted }: { app: SAppModule, cookieAccepted: boolean }) {
   const [readMore, setReadMore] = useState(false)
@@ -13,7 +13,7 @@ export default function AppCard({ app, cookieAccepted }: { app: SAppModule, cook
       className={twMerge(cookieAccepted
         ? "hover:bg-slate-400 dark:hover:bg-slate-700"
         : "pointer-events-none cursor-default text-gray-300 dark:text-muted",
-        "mx-3 p-2 text-center rounded-xl border"
+        "mx-3 p-2 border"
       )}
       to={app.url}
     >

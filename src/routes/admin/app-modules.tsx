@@ -12,8 +12,7 @@ import { Input } from "@/components/ui/input"
 import { Switch } from "@/components/ui/switch"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
-
-import { Pencil, Save, Trash2, Undo2 } from "lucide-react"
+import { Spinner } from "@/components/ui/spinner"
 import {
   Dialog,
   DialogClose,
@@ -24,6 +23,8 @@ import {
   DialogTitle,
   DialogTrigger
 } from "@/components/ui/dialog"
+
+import { Pencil, Save, Trash2, Undo2 } from "lucide-react"
 
 type Modes = "NEW" | "SET"
 
@@ -131,7 +132,7 @@ export default function AppModules() {
   }
 
   return (
-    <div className="mx-auto max-w-screen-sm px-3 sm:px-0 mb-3 space-y-3">
+    <div className="mx-auto max-w-screen-sm px-3 sm:px-0 space-y-3">
       <p className="">Configure OpenApps web modules.</p>
       <div className="">
         <form className="flex gap-5 justify-between items-center border border-slate-400 rounded-lg p-3" action="" onSubmit={handleSaveModule}>
@@ -168,7 +169,7 @@ export default function AppModules() {
           </div>
         </form>
 
-        {isLoading && <p className="mt-3">Loading...</p>}
+        {isLoading && <div className="flex justify-center"><Spinner className="size-15" /></div>}
 
         {appModules.map((v, i) => {
           return (

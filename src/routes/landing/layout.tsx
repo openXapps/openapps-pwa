@@ -8,7 +8,8 @@ export default function Layout() {
         <AppBar />
       </div>
       {/* <div className="mx-auto sm:container max-w-5xl"> */}
-      <div className="mx-auto max-w-5xl mt-18">
+      {/* <div className="mx-auto max-w-5xl mt-18"> */}
+      <div className="mt-16 mb-12">
         <Outlet />
       </div>
     </>

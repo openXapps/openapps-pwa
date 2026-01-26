@@ -60,7 +60,7 @@ export default function UserProfile() {
   }
 
   return (
-    <div className="mx-3 mb-3 space-y-3">
+    <div className="max-w-md mx-auto space-y-3 px-3 sm:px-0">
       <p className="">View or amend your user profile data.</p>
       <form className="space-y-2" onSubmit={handleUpdateUser}>
         <Input ref={nameRef} type="text" placeholder="Display name" defaultValue={getInfo().displayName || undefined} />
