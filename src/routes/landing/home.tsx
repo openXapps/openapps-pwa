@@ -52,7 +52,8 @@ export default function Home() {
   return (
     <>
       {/* <div className="mx-auto max-w-screen-sm flex flex-col md:gap-6 mb-15"> */}
-      <div className="flex flex-col md:gap-6">
+      {/* <div className="flex flex-col md:gap-6"> */}
+      <div className="">
         {isLoading
           ? (
             <div className="flex justify-center">
@@ -62,14 +63,15 @@ export default function Home() {
           : (
             !isError.ok
               ? (
-                <div className="flex flex-col gap-6 mt-3 mx-auto items-center">
+                <div className="flex flex-col gap-6 items-center mx-auto pt-10">
                   <p className="text-center">{isError.message}</p>
                   <Button variant="outline" onClick={() => window.location.reload()}>Lets reload the page</Button>
                 </div>
               )
-              : (appModules.map(v => (
-                v.isActive && <AppCard key={v.id} app={v} cookieAccepted={cookieAccepted} />
-              )))
+              : (appModules.map((v, i) => {
+                let isEven: boolean = i % 2 == 0
+                return v.isActive && <AppCard key={v.id} app={v} cookieAccepted={cookieAccepted} isEven={isEven} />
+              }))
           )
         }
       </div>

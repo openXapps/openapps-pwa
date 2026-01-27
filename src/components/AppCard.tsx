@@ -1,31 +1,50 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Link } from "react-router"
 import { twMerge } from "tailwind-merge"
 
 import type { SAppModule } from "@/schemas/app-schemas"
 import { Button } from "@/components/ui/button"
+import { ChevronDown, ChevronUp } from "lucide-react"
 
-export default function AppCard({ app, cookieAccepted }: { app: SAppModule, cookieAccepted: boolean }) {
+type AppCardProps = {
+  app: SAppModule
+  cookieAccepted: boolean
+  isEven: boolean
+}
+
+export default function AppCard({ app, cookieAccepted, isEven }: AppCardProps) {
   const [readMore, setReadMore] = useState(false)
+  const [desc, setDesc] = useState(app.moduleDesc)
+
+  useEffect(() => {
+    if (app.moduleDesc) {
+      readMore && setDesc(app.moduleDesc)
+      !readMore && setDesc(app.moduleDesc.substring(0, 100) + "...")
+    }
+  }, [readMore])
 
   return (
-    <Link
-      className={twMerge(cookieAccepted
-        ? "hover:bg-slate-400 dark:hover:bg-slate-700"
-        : "pointer-events-none cursor-default text-gray-300 dark:text-muted",
-        "mx-3 p-2 border"
-      )}
-      to={app.url}
-    >
-      <h1 className="text-xl font-bold font-mono">{app.moduleName}</h1>
-      <p className={twMerge(readMore ? "" : "truncate", "font-mono")}>{app.moduleDesc}</p>
-      {/* <p className="font-mono">Created: {app.updatedAt.toDateString()}</p>
-      <p className="font-mono">Updated: {app.createdAt.toDateString()}</p>
-      <p className="font-mono">ID: {app.id}</p> */}
-      <Button className="float-end" variant="ghost" onClick={(e) => {
-        e.preventDefault()
-        setReadMore(prevState => !prevState)
-      }}>{readMore ? "Read less" : "Read more"}</Button>
-    </Link>
+    <div className={twMerge(!isEven && "bg-muted", "p-2 min-h-25")}>
+      <div className="flex gap-3 max-w-3xl mx-auto">
+        {cookieAccepted ? (
+          <>
+            <Link className="grow" to={app.url}>
+              {/* <h1 className="text-xl font-bold font-mono">{app.moduleName}</h1> */}
+              <p className="text-xl font-bold font-mono">{app.moduleName}</p>
+              <p className="">{desc}</p>
+            </Link>
+            <Button variant="ghost" size="icon" onClick={(e) => {
+              e.preventDefault()
+              setReadMore(prevState => !prevState)
+            }}>{readMore ? <ChevronUp /> : <ChevronDown />}</Button>
+          </>
+        ) : (
+          <div>
+            <p className="text-xl font-bold font-mono text-muted">{app.moduleName}</p>
+            <p className="text-muted">{desc}</p>
+          </div>
+        )}
+      </div>
+    </div>
   )
 }
