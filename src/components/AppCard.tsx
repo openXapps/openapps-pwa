@@ -29,7 +29,6 @@ export default function AppCard({ app, cookieAccepted, isEven }: AppCardProps) {
         {cookieAccepted ? (
           <>
             <Link className="grow" to={app.url}>
-              {/* <h1 className="text-xl font-bold font-mono">{app.moduleName}</h1> */}
               <p className="text-xl font-bold font-mono">{app.moduleName}</p>
               <p className="">{desc}</p>
             </Link>

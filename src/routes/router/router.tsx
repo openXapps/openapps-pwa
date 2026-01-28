@@ -25,16 +25,16 @@ export default function Router() {
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
           <Route element={<ProtectedRoute isAuthorized={!getIsAuthorized()} redirectPath="/" />}>
-            <Route path="signin" element={<SignInUser />} />
-            <Route path="signup" element={<SignUpUser />} />
-          </Route>
-          <Route element={<ProtectedRoute isAuthorized={getIsAuthorized()} redirectPath="/" />}>
-            <Route path="user" element={<UserProfile />} />
             <Route path="bookmarker" element={<Bookmarker />} />
             <Route path="movies" element={<Movies />} />
             <Route path="cryptopass" element={<CryptoPass />} />
             <Route path="mylist" element={<MyList />} />
             <Route path="notes" element={<Notes />} />
+            <Route path="signin" element={<SignInUser />} />
+            <Route path="signup" element={<SignUpUser />} />
+          </Route>
+          <Route element={<ProtectedRoute isAuthorized={getIsAuthorized()} redirectPath="/" />}>
+            <Route path="user" element={<UserProfile />} />
           </Route>
           <Route element={<ProtectedRoute isAuthorized={getIsAuthorized() && getIsAdmin()} redirectPath="/" />}>
             <Route path="appmodules" element={<AppModules />} />

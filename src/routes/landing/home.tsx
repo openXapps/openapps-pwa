@@ -18,6 +18,7 @@ export default function Home() {
   const [appModules, setAppModules] = useState<SAppModule[]>([])
   const [cookieAccepted, setCookiesAccepted] = useState(true)
   const [isError, setIsError] = useState({ ok: true, message: "" })
+  const [retry, setRetry] = useState(0)
 
   async function fetchData() {
     const data: TGetAllDocumentsProps<SAppModule> = await getAllDocuments("/appModules/", appModuleConverter)
@@ -31,7 +32,7 @@ export default function Home() {
   useEffect(() => {
     fetchData()
     return () => { }
-  }, [])
+  }, [retry])
 
   useEffect(() => {
     const cookies = decodeURIComponent(document.cookie)
@@ -41,7 +42,7 @@ export default function Home() {
     return () => { }
   }, [cookieAccepted])
 
-  const handleAcceptCookies = () => {
+  function handleAcceptCookies() {
     let d = new Date()
     d.setTime(d.getTime() + (30 * 24 * 60 * 60 * 1000))
     const expires = `expires=${d.toUTCString()}`
@@ -49,23 +50,27 @@ export default function Home() {
     setCookiesAccepted(true)
   }
 
+  function handleRetry() {
+    setRetry(prevState => prevState + 1)
+    setIsError({ ok: true, message: "" })
+  }
+
   return (
     <>
-      {/* <div className="mx-auto max-w-screen-sm flex flex-col md:gap-6 mb-15"> */}
-      {/* <div className="flex flex-col md:gap-6"> */}
       <div className="">
         {isLoading
           ? (
-            <div className="flex justify-center">
+            <div className="flex justify-center mt-30">
               <Spinner className="size-15" />
             </div>
           )
           : (
             !isError.ok
               ? (
-                <div className="flex flex-col gap-6 items-center mx-auto pt-10">
+                <div className="flex flex-col gap-6 items-center mx-auto mt-30">
                   <p className="text-center">{isError.message}</p>
-                  <Button variant="outline" onClick={() => window.location.reload()}>Lets reload the page</Button>
+                  {/* <Button variant="outline" onClick={() => window.location.reload()}>Lets reload the page</Button> */}
+                  <Button variant="outline" onClick={handleRetry}>Lets reload the page - Attempt {retry}</Button>
                 </div>
               )
               : (appModules.map((v, i) => {
