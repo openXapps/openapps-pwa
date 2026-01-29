@@ -25,7 +25,7 @@ export default function Home() {
     if (data.ok) {
       setAppModules(data.payload.sort((a, b) => (a.order || 100) - (b.order || 100)))
     } else {
-      setIsError({ ok: false, message: `Oops! Looks like we cannot reach the cloud. ${data.message}` })
+      setIsError({ ok: false, message: `Oops! Looks like we cannot reach the cloud. ${data.message}.` })
     }
   }
 
@@ -69,7 +69,6 @@ export default function Home() {
               ? (
                 <div className="flex flex-col gap-6 items-center mx-auto mt-30">
                   <p className="text-center">{isError.message}</p>
-                  {/* <Button variant="outline" onClick={() => window.location.reload()}>Lets reload the page</Button> */}
                   <Button variant="outline" onClick={handleRetry}>Lets reload the page - Attempt {retry}</Button>
                 </div>
               )
