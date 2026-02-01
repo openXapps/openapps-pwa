@@ -3,7 +3,7 @@ import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
 
-import TermsOfUse from "./terms-of-use"
+import Terms from "./terms"
 
 const emojis = { grinningFaceWithBigEyes: "😃" }
 
@@ -54,7 +54,7 @@ export default function Disclaimer({ cookieAccepted, handleAcceptCookies }: Disc
           <p><span className="font-bold">No ads!</span> <span>{emojis.grinningFaceWithBigEyes}</span> Visit me on <Github /></p>
         ) : (
           <>
-            {tcOpen && <TermsOfUse coolBeans={setTcClicked} setTcOpen={setTcOpen} />}
+            {tcOpen && <Terms coolBeans={setTcClicked} setTcOpen={setTcOpen} />}
             {tcOpen && <Separator />}
             <p className="text-center">This site makes use of <Cookie /> and <Storage /> to give you the best online experience.</p>
             {!tcOpen && <Button variant="outline" onClick={() => {

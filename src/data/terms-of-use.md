@@ -7,7 +7,7 @@ This document governs
 You must read this document carefully.
 
 Our website is provided by: [OpenApps](https://github.com/openXapps), South Africa\
-Contact email: [currently unavailable]
+Contact email: info@openapps.co.za
 
 **What you should know at a glance**
 
