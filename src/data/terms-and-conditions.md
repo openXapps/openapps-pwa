@@ -1,5 +1,3 @@
-**Terms & Conditions**  
-
 These terms and conditions apply to the OpenApps [progressive web application](https://en.wikipedia.org/wiki/Progressive_web_app) (hereby referred to as "Web App") for any computer device that enables a web browser interface that was created by OpenApps (hereby referred to as "Service Provider") as an Open Source service.
 
 Upon downloading or utilizing the Web App, you are automatically agreeing to the following terms. It is strongly advised that you thoroughly read and understand these terms prior to using the Web App.

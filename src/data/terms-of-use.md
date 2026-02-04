@@ -1,5 +1,3 @@
-**Terms of Use of openapps.co.za**
-
 This document governs
 - the use of our website, and,
 - any other related agreement or legal relationship with us in a legally binding way.

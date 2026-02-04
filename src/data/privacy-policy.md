@@ -1,5 +1,3 @@
-**Privacy Policy**
-
 This privacy policy applies to the OpenApps [progressive web application](https://en.wikipedia.org/wiki/Progressive_web_app) (hereby referred to as "Web App") for any computer device that enables a web browser interface that was created by OpenApps (hereby referred to as "Service Provider") as an Open Source service. This service is intended for use "AS IS".
 
 **Information Collection and Use**
