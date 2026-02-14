@@ -1,7 +1,7 @@
 /**
  * Firebase user info type.
  */
-export type TUserInfoType = {
+export type TUserInfo = {
   displayName: string | null
   photoURL: string | null
   email: string | null

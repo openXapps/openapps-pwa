@@ -13,7 +13,7 @@ import {
 } from "firebase/auth"
 
 import { auth, AuthProviderContext } from "@/context/AuthProvider"
-import type { TUserInfoType } from "@/types/firestore-types"
+import type { TUserInfo } from "@/types/firestore-types"
 
 /**
  * Auth context hook
@@ -63,7 +63,7 @@ export default function useAuth() {
     }
   }
 
-  function getInfo(): TUserInfoType {
+  function getInfo(): TUserInfo {
     if (context.state.auth.currentUser) {
       const user: User = context.state.auth.currentUser
       return {
@@ -81,7 +81,7 @@ export default function useAuth() {
     }
   }
 
-  function setInfo(info: TUserInfoType): Promise<void> {
+  function setInfo(info: TUserInfo): Promise<void> {
     if (context.state.auth.currentUser !== null) {
       const user: User = {
         ...context.state.auth.currentUser,

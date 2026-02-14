@@ -30,7 +30,7 @@ export default function AppCard({ app, cookieAccepted, isEven }: AppCardProps) {
           <>
             <Link className="grow" to={app.url}>
               <p className="text-xl font-bold font-mono">{app.moduleName}</p>
-              <p className="">{desc}</p>
+              <p className="mt-2">{desc}</p>
             </Link>
             <Button variant="ghost" size="icon" onClick={(e) => {
               e.preventDefault()
