@@ -6,6 +6,8 @@ import { Input } from '@/components/ui/input'
 
 import useAuth from '@/hooks/useAuth'
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { Field, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field"
+import { Separator } from "@/components/ui/separator"
 
 // https://picsum.photos/
 
@@ -21,20 +23,22 @@ export default function UserProfile() {
   const handleUpdateUser = async (e: React.FormEvent<HTMLFormElement | HTMLButtonElement>) => {
     e.preventDefault()
     setIsBusy(true)
-    if (
-      nameRef.current !== null &&
-      emailRef.current !== null &&
-      photoRef.current !== null
-    )
-      try {
-        await setInfo({
-          displayName: nameRef.current.value,
-          photoURL: photoRef.current.value,
-          email: emailRef.current.value,
-        })
-      } catch (error) {
-        console.log(error)
+
+    if (nameRef.current !== null && emailRef.current !== null && photoRef.current !== null) {
+      const isValid = true // Fixed value for now. Need implementation
+      if (isValid) {
+        try {
+          await setInfo({
+            displayName: nameRef.current.value,
+            photoURL: photoRef.current.value,
+            email: emailRef.current.value,
+          })
+        } catch (error) {
+          console.log(error)
+        }
       }
+    }
+
     if (emailRef.current !== null) {
       const isEmailValid = true // Fixed value for now. Need implementation
       if (isEmailValid && emailRef.current.value !== getInfo().email) {
@@ -45,6 +49,7 @@ export default function UserProfile() {
         }
       }
     }
+
     if (passwordRef.current !== null) {
       const isPasswordValid = true // Fixed value for now. Need implementation
       if (isPasswordValid) {
@@ -55,6 +60,7 @@ export default function UserProfile() {
         }
       }
     }
+
     setIsBusy(false)
     rrNavigate(-1)
   }
@@ -63,16 +69,53 @@ export default function UserProfile() {
     <div className="max-w-md mx-auto space-y-3 px-3 sm:px-0">
       <p className="">View or amend your user profile data.</p>
       <form className="space-y-2" onSubmit={handleUpdateUser}>
-        <Input ref={nameRef} type="text" placeholder="Display name" defaultValue={getInfo().displayName || undefined} />
-        <Input ref={photoRef} type="url" placeholder="Photo URL" defaultValue={getInfo().photoURL || undefined} />
-        <Input ref={emailRef} type="email" placeholder="Email" defaultValue={getInfo().email || undefined} />
-        <Input ref={passwordRef} type="password" placeholder="New password (leave blank if unchanged)" />
+        <FieldGroup>
+          <Field>
+            <FieldLabel htmlFor="user-details-name">Name</FieldLabel>
+            <Input
+              id="user-details-name"
+              ref={nameRef}
+              type="text"
+              placeholder="Display name"
+              defaultValue={getInfo().displayName || undefined} />
+          </Field>
+          <Field>
+            <FieldLabel htmlFor="user-details-photo">Photo URL</FieldLabel>
+            <Input
+              id="user-details-photo"
+              ref={photoRef}
+              type="url"
+              placeholder="Photo URL"
+              defaultValue={getInfo().photoURL || undefined} />
+          </Field>
+          <div className="grid grid-cols-2 gap-4">
+            <Field>
+              <FieldLabel htmlFor="user-details-email">Email</FieldLabel>
+              <Input
+                id="user-details-email"
+                ref={emailRef}
+                type="email"
+                placeholder="Email"
+                defaultValue={getInfo().email || undefined} />
+            </Field>
+            <Field>
+              <FieldLabel htmlFor="user-details-password">Password</FieldLabel>
+              <Input
+                id="user-details-password"
+                ref={passwordRef}
+                type="password"
+                placeholder="Leave blank if unchanged" />
+            </Field>
+          </div>
+        </FieldGroup>
       </form>
+      <Separator />
       <div className="space-x-2">
         <Button onClick={handleUpdateUser} type="submit" disabled={isBusy}>Save</Button>
         {/* <Button onClick={() => { }} disabled={isBusy}>Reset Password</Button> */}
         <Button onClick={() => rrNavigate(-1)} disabled={isBusy}>Back</Button>
       </div>
+      <Separator />
       <p>Email validated: {getInfo().emailVerified ? 'YES' : 'NO'}</p>
       <p>Administrator: {getIsAdmin() ? 'YES' : 'NO'}</p>
       <p>{getUID()}</p>

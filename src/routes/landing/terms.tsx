@@ -1,5 +1,5 @@
 import { useEffect, useState, type Dispatch, type SetStateAction } from "react"
-import ReactMarkdown from "react-markdown"
+import Markdown from "react-markdown"
 import remarkGfm from "remark-gfm"
 
 import { Button } from "@/components/ui/button"
@@ -19,7 +19,6 @@ type TsAndCsProps = {
 
 // https://github.com/remarkjs/react-markdown?tab=readme-ov-file#plugins
 // https://github.com/tailwindlabs/tailwindcss-typography
-// https://strapi.io/blog/react-markdown-complete-guide-security-styling
 
 type TermProps = {
   touLoading: boolean
@@ -66,17 +65,17 @@ export default function Terms({ coolBeans, setTcOpen }: TsAndCsProps) {
           <div className="h-[calc(100dvh-335px)] sm:h-[calc(100dvh-300px)] max-w-screen-sm md:max-w-3xl overflow-y-auto">
             <TabsContent value="terms-and-conditions">
               <article className="prose prose-sm dark:prose-invert max-w-none p-2 bg-white dark:bg-black text-justify font-mono text-sm">
-                <ReactMarkdown disallowedElements={['img', 'iframe', 'script']} remarkPlugins={[remarkGfm]}>{mdTAC}</ReactMarkdown>
+                <Markdown remarkPlugins={[remarkGfm]}>{mdTAC}</Markdown>
               </article >
             </TabsContent>
             <TabsContent value="terms-of-use">
               <article className="prose prose-sm dark:prose-invert max-w-none p-2 bg-white dark:bg-black text-justify font-mono text-sm">
-                <ReactMarkdown disallowedElements={['img', 'iframe', 'script']} remarkPlugins={[remarkGfm]}>{mdTOU}</ReactMarkdown>
+                <Markdown remarkPlugins={[remarkGfm]}>{mdTOU}</Markdown>
               </article >
             </TabsContent>
             <TabsContent value="privacy-policy">
               <article className="prose prose-sm dark:prose-invert max-w-none p-2 bg-white dark:bg-black text-justify font-mono text-sm">
-                <ReactMarkdown disallowedElements={['img', 'iframe', 'script']} remarkPlugins={[remarkGfm]}>{mdPP}</ReactMarkdown>
+                <Markdown remarkPlugins={[remarkGfm]}>{mdPP}</Markdown>
               </article >
             </TabsContent>
           </div>
