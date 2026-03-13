@@ -8,6 +8,7 @@ import useAuth from '@/hooks/useAuth'
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Field, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field"
 import { Separator } from "@/components/ui/separator"
+import type { TUserInfoType } from "@/types/firestore-types"
 
 // https://picsum.photos/
 
@@ -15,6 +16,7 @@ export default function UserProfile() {
   const rrNavigate = useNavigate()
   const { getInfo, setInfo, setEmail, setPassword, getUID, getIsAdmin } = useAuth()
   const [isBusy, setIsBusy] = useState(false)
+  const currentValues: TUserInfoType = getInfo()
   const nameRef = useRef<HTMLInputElement | null>(null)
   const photoRef = useRef<HTMLInputElement | null>(null)
   const emailRef = useRef<HTMLInputElement | null>(null)
@@ -26,20 +28,25 @@ export default function UserProfile() {
 
     if (nameRef.current !== null && emailRef.current !== null && photoRef.current !== null) {
       const isValid = true // Fixed value for now. Need implementation
-      if (isValid) {
-        try {
-          await setInfo({
-            displayName: nameRef.current.value,
-            photoURL: photoRef.current.value,
-            email: emailRef.current.value,
-          })
-        } catch (error) {
-          console.log(error)
+      if (
+        currentValues.displayName !== nameRef.current.value ||
+        currentValues.photoURL !== photoRef.current.value
+      ) {
+        if (isValid) {
+          try {
+            await setInfo({
+              displayName: nameRef.current.value,
+              photoURL: photoRef.current.value,
+              email: emailRef.current.value,
+            })
+          } catch (error) {
+            console.log(error)
+          }
         }
       }
     }
 
-    if (emailRef.current !== null) {
+    if (emailRef.current !== null && currentValues.email !== emailRef.current.value) {
       const isEmailValid = true // Fixed value for now. Need implementation
       if (isEmailValid && emailRef.current.value !== getInfo().email) {
         try {
@@ -77,7 +84,8 @@ export default function UserProfile() {
               ref={nameRef}
               type="text"
               placeholder="Display name"
-              defaultValue={getInfo().displayName || undefined} />
+              // defaultValue={getInfo().displayName || undefined} />
+              defaultValue={currentValues.displayName || undefined} />
           </Field>
           <Field>
             <FieldLabel htmlFor="user-details-photo">Photo URL</FieldLabel>
@@ -86,7 +94,7 @@ export default function UserProfile() {
               ref={photoRef}
               type="url"
               placeholder="Photo URL"
-              defaultValue={getInfo().photoURL || undefined} />
+              defaultValue={currentValues.photoURL || undefined} />
           </Field>
           <div className="grid grid-cols-2 gap-4">
             <Field>
@@ -96,7 +104,7 @@ export default function UserProfile() {
                 ref={emailRef}
                 type="email"
                 placeholder="Email"
-                defaultValue={getInfo().email || undefined} />
+                defaultValue={currentValues.email || undefined} />
             </Field>
             <Field>
               <FieldLabel htmlFor="user-details-password">Password</FieldLabel>
@@ -116,11 +124,11 @@ export default function UserProfile() {
         <Button onClick={() => rrNavigate(-1)} disabled={isBusy}>Back</Button>
       </div>
       <Separator />
-      <p>Email validated: {getInfo().emailVerified ? 'YES' : 'NO'}</p>
+      <p>Email validated: {currentValues.emailVerified ? 'YES' : 'NO'}</p>
       <p>Administrator: {getIsAdmin() ? 'YES' : 'NO'}</p>
       <p>{getUID()}</p>
       <Avatar>
-        <AvatarImage src={getInfo().photoURL || undefined} alt={getInfo().email || undefined} />
+        <AvatarImage src={currentValues.photoURL || undefined} alt={currentValues.email || undefined} />
         <AvatarFallback>CN</AvatarFallback>
       </Avatar>
     </div>
