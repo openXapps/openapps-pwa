@@ -20,7 +20,7 @@ export default function Disclaimer({ cookieAccepted, handleAcceptCookies }: Disc
     return (
       <a
         className="underline"
-        href="https://en.wikipedia.org/wiki/HTTP_cookie"
+        href="https://allaboutcookies.org"
         target="_blank"
         rel="noopener noreferrer"
       >cookies</a>
