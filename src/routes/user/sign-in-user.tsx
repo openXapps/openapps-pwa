@@ -6,8 +6,9 @@ import { Button } from "@/components/ui/button"
 
 import useAuth from "@/hooks/useAuth"
 import { Field, FieldDescription, FieldGroup, FieldLabel } from "@/components/ui/field"
+import { toast } from "sonner"
 
-const isErrorInit: { status: boolean, message: string } = { status: false, message: "" }
+// const isErrorInit: { status: boolean, message: string } = { status: false, message: "" }
 
 // For emulation testing
 const testUser = "john@domain.com"
@@ -18,26 +19,33 @@ export default function SignInUser() {
   const { signInUser, setIsAuthorized, getIsAuthorized, setIsAdmin } = useAuth()
   const username = useRef<HTMLInputElement | null>(null)
   const password = useRef<HTMLInputElement | null>(null)
-  const [isError, setIsError] = useState(isErrorInit)
   const [isBusy, setIsBusy] = useState(false)
+  // https://uibakery.io/regex-library/password
+  const usernameRegex = /^\S+@\S+\.\S+$/
 
-  const handleSignInUser = async (e: React.FormEvent<HTMLFormElement | HTMLButtonElement>) => {
+  const handleSignInUser = async (e: React.SubmitEvent<HTMLFormElement | HTMLButtonElement>) => {
     e.preventDefault()
     if (username.current?.value && password.current?.value) {
-      setIsBusy(true)
-      try {
-        await signInUser(username.current.value, password.current.value)
-        isError && setIsError(isErrorInit)
-        setIsAuthorized(true)
-        setIsAdmin()
-        rrNavigate("/", { replace: true })
-      } catch (error) {
-        setIsError({ status: true, message: "Sign in error, try again" })
-        setIsBusy(false)
-        password.current.value = ""
+      if (usernameRegex.test(username.current.value)) {
+        setIsBusy(true)
+        try {
+          await signInUser(username.current.value, password.current.value)
+          // isError && setIsError(isErrorInit)
+          setIsAuthorized(true)
+          setIsAdmin()
+          rrNavigate("/", { replace: true })
+        } catch (error) {
+          // setIsError({ status: true, message: "Sign in error, try again" })
+          toast.error("Sign in error, try again", { position: "top-center" })
+          setIsBusy(false)
+          password.current.value = ""
+        }
+      } else {
+        toast.warning("Username is not a valid email address", { position: "top-center" })
       }
     } else {
-      setIsError({ status: true, message: "Provide both username and password" })
+      // setIsError({ status: true, message: "Provide both username and password" })
+      toast.warning("Please provide both username and password", { position: "top-center" })
     }
   }
 
@@ -58,9 +66,8 @@ export default function SignInUser() {
             <Input
               id="sign-up-email"
               defaultValue={testUser}
-              type="email"
+              type="text"
               placeholder="name@example.com"
-              required
               ref={username}
             />
           </Field>
@@ -74,7 +81,6 @@ export default function SignInUser() {
               id="sign-up-password"
               defaultValue={testPass}
               type="password"
-              required
               ref={password}
             />
             <FieldDescription>For now, if you forgot your password, it cannot be recovered</FieldDescription>
@@ -87,7 +93,6 @@ export default function SignInUser() {
           </Field>
         </FieldGroup>
       </form>
-      {isError.status && <p className="text-red-400 mt-3">{isError.message}</p>}
       {getIsAuthorized() && <p className="text-green-400 mt-3">You authorized</p>}
     </div>
   )

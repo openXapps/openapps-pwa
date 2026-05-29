@@ -4,6 +4,6 @@
 # Bash script to start React project DEV environment
 # ------------------------------------------------------------------
 
-pnpm run dev
+pnpm run dev --host
 
 

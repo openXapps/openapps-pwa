@@ -1,6 +1,8 @@
 // import { Outlet, useLocation } from "react-router"
 import { Outlet } from "react-router"
+
 import AppBar from "@/components/AppBar"
+import { Toaster } from "@/components/ui/sonner"
 
 export default function Layout() {
   // const rrLocation = useLocation()
@@ -9,11 +11,12 @@ export default function Layout() {
    * TODO
    * Need to catch an external redirect
    */
-// https://www.robinwieruch.de/react-router-redirect/
+  // https://www.robinwieruch.de/react-router-redirect/
   // console.log(rrLocation.search);
-  
+
   return (
     <>
+      <Toaster />
       <div className="">
         <AppBar />
       </div>

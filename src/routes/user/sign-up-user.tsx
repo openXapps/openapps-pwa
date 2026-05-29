@@ -1,38 +1,42 @@
 import { useRef, useState } from "react"
 import { useNavigate } from "react-router"
 
+import { toast } from "sonner"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Field, FieldDescription, FieldGroup, FieldLabel } from "@/components/ui/field"
 
 import useAuth from "@/hooks/useAuth"
 
-const isErrorInit: { status: boolean, message: string } = { status: false, message: "" }
-
 export default function SignUpUser() {
   const rrNavigate = useNavigate()
   const { signUpUser, setIsAuthorized, getIsAuthorized } = useAuth()
   const username = useRef<HTMLInputElement | null>(null)
   const password = useRef<HTMLInputElement | null>(null)
-  const [isError, setIsError] = useState(isErrorInit)
   const [isBusy, setIsBusy] = useState(false)
+  // https://uibakery.io/regex-library/password
+  const usernameRegex = /^\S+@\S+\.\S+$/
+  const passwordRegex = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/
 
   const handleSignUpUser = async (e: React.FormEvent<HTMLFormElement | HTMLButtonElement>) => {
     e.preventDefault()
     if (username.current?.value && password.current?.value) {
-      setIsBusy(true)
-      try {
-        await signUpUser(username.current.value, password.current.value)
-        isError && setIsError(isErrorInit)
-        setIsAuthorized(true)
-        rrNavigate("/", { replace: true })
-      } catch (error) {
-        setIsError({ status: true, message: "Sign up error, try again" })
-        setIsBusy(false)
-        password.current.value = ""
+      if (usernameRegex.test(username.current.value) && passwordRegex.test(password.current.value)) {
+        setIsBusy(true)
+        try {
+          await signUpUser(username.current.value, password.current.value)
+          setIsAuthorized(true)
+          rrNavigate("/", { replace: true })
+        } catch (error) {
+          toast.error("Sign up error, try again", { position: "top-center" })
+          setIsBusy(false)
+          password.current.value = ""
+        }
+      } else {
+        toast.warning("Username or password does not comply", { position: "top-center" })
       }
     } else {
-      setIsError({ status: true, message: "Provide both username and password" })
+      toast.warning("Please provide both username and password", { position: "top-center" })
     }
   }
 
@@ -46,14 +50,13 @@ export default function SignUpUser() {
     <div className="max-w-md mx-auto space-y-3 px-3 sm:px-0">
       <p className="">Welcome to OpenApps. Please provide an email and password to sign-up for an account.</p>
       <form action="" onSubmit={handleSignUpUser}>
-        <FieldGroup>
+        <FieldGroup data-slot="field-group">
           <Field>
             <FieldLabel htmlFor="sign-up-email">Email</FieldLabel>
             <Input
               id="sign-up-email"
-              type="email"
+              type="text"
               placeholder="name@example.com"
-              required
               ref={username}
             />
           </Field>
@@ -62,7 +65,6 @@ export default function SignUpUser() {
             <Input
               id="sign-up-password"
               type="password"
-              required
               ref={password}
             />
             <p className="text-sm">Typical requirements for a "strong" password include:</p>
@@ -82,7 +84,6 @@ export default function SignUpUser() {
           </Field>
         </FieldGroup>
       </form>
-      {isError.status && <p className="text-red-400 mt-3">{isError.message}</p>}
     </div>
   )
 }
