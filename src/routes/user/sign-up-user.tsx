@@ -1,89 +1,138 @@
-import { useRef, useState } from "react"
-import { useNavigate } from "react-router"
+// import { useNavigate } from "react-router"
+import * as z from "zod"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { Controller, useForm } from "react-hook-form"
 
-import { toast } from "sonner"
+// import { toast } from "sonner"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
-import { Field, FieldDescription, FieldGroup, FieldLabel } from "@/components/ui/field"
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { Field, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field"
 
-import useAuth from "@/hooks/useAuth"
+// import useAuth from "@/hooks/useAuth"
+
+// https://ui.shadcn.com/docs/forms/react-hook-form
+// https://uibakery.io/regex-library/password
+const formSchema = z.object({
+  username: z
+    .string()
+    .regex(/^\S+@\S+\.\S+$/, "Username must be a valid email address"),
+  password: z
+    .string()
+    .min(8, "Password must be at least 8 characters long")
+    .regex(/[A-Z]/, "Password must contain at least one uppercase letter")
+    .regex(/[a-z]/, "Password must contain at least one lowercase letter")
+    .regex(/[0-9]/, "Password must contain at least one number")
+    .regex(/[^A-Za-z0-9]/, "Password must contain at least one special character")
+})
+// .regex(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/, "Password is not strong enough")
 
 export default function SignUpUser() {
-  const rrNavigate = useNavigate()
-  const { signUpUser, setIsAuthorized, getIsAuthorized } = useAuth()
-  const username = useRef<HTMLInputElement | null>(null)
-  const password = useRef<HTMLInputElement | null>(null)
-  const [isBusy, setIsBusy] = useState(false)
-  // https://uibakery.io/regex-library/password
-  const usernameRegex = /^\S+@\S+\.\S+$/
-  const passwordRegex = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/
+  // const rrNavigate = useNavigate()
+  // const { signUpUser, setIsAuthorized, getIsAuthorized } = useAuth()
+  // const username = useRef<HTMLInputElement | null>(null)
+  // const password = useRef<HTMLInputElement | null>(null)
+  // const [isBusy, setIsBusy] = useState(false)
+  const signUpForm = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      username: "",
+      password: "",
+    },
+  })
 
-  const handleSignUpUser = async (e: React.FormEvent<HTMLFormElement | HTMLButtonElement>) => {
-    e.preventDefault()
-    if (username.current?.value && password.current?.value) {
-      if (usernameRegex.test(username.current.value) && passwordRegex.test(password.current.value)) {
-        setIsBusy(true)
-        try {
-          await signUpUser(username.current.value, password.current.value)
-          setIsAuthorized(true)
-          rrNavigate("/", { replace: true })
-        } catch (error) {
-          toast.error("Sign up error, try again", { position: "top-center" })
-          setIsBusy(false)
-          password.current.value = ""
-        }
-      } else {
-        toast.warning("Username or password does not comply", { position: "top-center" })
-      }
-    } else {
-      toast.warning("Please provide both username and password", { position: "top-center" })
-    }
+  function onSubmit(data: z.infer<typeof formSchema>) {
+    console.log(data)
+
   }
 
-  // const handleClearFields = () => {
-  //   if (username.current != undefined) username.current.value = ""
-  //   if (password.current != undefined) password.current.value = ""
-  //   setIsError(isErrorInit)
+  // const handleSignUpUser = async (e: React.FormEvent<HTMLFormElement | HTMLButtonElement>) => {
+  //   e.preventDefault()
+  //   if (username.current?.value && password.current?.value) {
+  //     if (usernameRegex.test(username.current.value) && passwordRegex.test(password.current.value)) {
+  //       setIsBusy(true)
+  //       try {
+  //         await signUpUser(username.current.value, password.current.value)
+  //         setIsAuthorized(true)
+  //         rrNavigate("/", { replace: true })
+  //       } catch (error) {
+  //         toast.error("Sign up error, try again", { position: "top-center" })
+  //         setIsBusy(false)
+  //         password.current.value = ""
+  //       }
+  //     } else {
+  //       toast.warning("Username or password does not comply", { position: "top-center" })
+  //     }
+  //   } else {
+  //     toast.warning("Please provide both username and password", { position: "top-center" })
+  //   }
   // }
 
   return (
-    <div className="max-w-md mx-auto space-y-3 px-3 sm:px-0">
-      <p className="">Welcome to OpenApps. Please provide an email and password to sign-up for an account.</p>
-      <form action="" onSubmit={handleSignUpUser}>
-        <FieldGroup data-slot="field-group">
-          <Field>
-            <FieldLabel htmlFor="sign-up-email">Email</FieldLabel>
-            <Input
-              id="sign-up-email"
-              type="text"
-              placeholder="name@example.com"
-              ref={username}
-            />
+    <div className="max-w-md mx-auto">
+      <Card>
+        <CardHeader>
+          <CardTitle>Create a new account</CardTitle>
+          <CardDescription>
+            Welcome to OpenApps. Please provide an email and password to sign-up for a free account.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <form id="form-sign-up" onSubmit={signUpForm.handleSubmit(onSubmit)}>
+            <FieldGroup>
+              <Controller
+                name="username"
+                control={signUpForm.control}
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid}>
+                    <FieldLabel htmlFor="form-sign-up-username">Username</FieldLabel>
+                    <Input
+                      {...field}
+                      type="email"
+                      id="form-sign-up-username"
+                      aria-invalid={fieldState.invalid}
+                      placeholder="name@domain.com"
+                      // autoComplete="off"
+                    />
+                    {fieldState.invalid && (<FieldError errors={[fieldState.error]} />)}
+                  </Field>
+                )}
+              />
+              <Controller
+                name="password"
+                control={signUpForm.control}
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid}>
+                    <FieldLabel htmlFor="form-sign-up-password">Password</FieldLabel>
+                    <Input
+                      {...field}
+                      type="password"
+                      id="form-sign-up-password"
+                      aria-invalid={fieldState.invalid}
+                      // autoComplete="off"
+                    />
+                    {fieldState.invalid && (<FieldError errors={[fieldState.error]} />)}
+                  </Field>
+                )}
+              />
+            </FieldGroup>
+          </form>
+          <p className="mt-4 text-sm">Typical requirements for a "strong" password include:</p>
+          <ul className="text-sm">
+            <li>- A minimum length (commonly 8 characters or more).</li>
+            <li>- At least one uppercase letter.</li>
+            <li>- At least one lowercase letter.</li>
+            <li>- At least one number (digit).</li>
+            <li>- At least one special character (e.g. !  @  #  $  %).</li>
+          </ul>
+        </CardContent>
+        <CardFooter>
+          <Field orientation="horizontal">
+            <Button type="button" variant="outline" onClick={() => signUpForm.reset()}>Reset</Button>
+            <Button type="submit" form="form-sign-up">Submit</Button>
           </Field>
-          <Field>
-            <FieldLabel htmlFor="sign-up-password">Password</FieldLabel>
-            <Input
-              id="sign-up-password"
-              type="password"
-              ref={password}
-            />
-            <p className="text-sm">Typical requirements for a "strong" password include:</p>
-            <ol className="text-sm">
-              <li>A minimum length (commonly 8 characters or more).</li>
-              <li>At least one uppercase letter.</li>
-              <li>At least one lowercase letter.</li>
-              <li>At least one number (digit).</li>
-              <li>At least one special character (e.g. !  @  #  $  %).</li>
-            </ol>
-          </Field>
-          <Field>
-            <Button disabled={isBusy || getIsAuthorized()} type="submit">Create a free account</Button>
-            <FieldDescription className="text-center">
-              By registering, you will automatically sign-in
-            </FieldDescription>
-          </Field>
-        </FieldGroup>
-      </form>
+        </CardFooter>
+      </Card>
     </div>
   )
 }
