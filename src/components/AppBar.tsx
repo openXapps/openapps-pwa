@@ -61,7 +61,7 @@ export default function AppBar() {
   return (
     <div className="fixed left-0 top-0 w-full z-10 bg-muted">
       <div className="max-w-3xl mx-auto flex justify-between items-center py-2 px-2 md:px-0">
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-3">
           <Link to="/">
             <img className="w-6" src={logo} alt="openapps logo" />
           </Link>

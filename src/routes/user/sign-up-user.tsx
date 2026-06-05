@@ -1,19 +1,22 @@
-// import { useNavigate } from "react-router"
+import { useState } from "react"
+import { useNavigate } from "react-router"
+import { Controller, useForm } from "react-hook-form"
 import * as z from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { Controller, useForm } from "react-hook-form"
 
-// import { toast } from "sonner"
+import { toast } from "sonner"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Field, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field"
+import { InputGroup, InputGroupAddon, InputGroupButton, InputGroupInput } from "@/components/ui/input-group"
 
-// import useAuth from "@/hooks/useAuth"
+import useAuth from "@/hooks/useAuth"
 
 // https://ui.shadcn.com/docs/forms/react-hook-form
 // https://uibakery.io/regex-library/password
 const formSchema = z.object({
+  knownAs: z.string().min(2, "Not a valid name").max(30, "Name is too long"),
   username: z
     .string()
     .regex(/^\S+@\S+\.\S+$/, "Username must be a valid email address"),
@@ -28,45 +31,41 @@ const formSchema = z.object({
 // .regex(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/, "Password is not strong enough")
 
 export default function SignUpUser() {
-  // const rrNavigate = useNavigate()
-  // const { signUpUser, setIsAuthorized, getIsAuthorized } = useAuth()
-  // const username = useRef<HTMLInputElement | null>(null)
-  // const password = useRef<HTMLInputElement | null>(null)
-  // const [isBusy, setIsBusy] = useState(false)
+  const rrNavigate = useNavigate()
+  const { signUpUser, setIsAuthorized, getIsAuthorized, setInfo } = useAuth()
+  const [isBusy, setIsBusy] = useState(false)
+  const [showPassword, setShowPassword] = useState(false)
   const signUpForm = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
+      knownAs: "",
       username: "",
       password: "",
     },
   })
 
-  function onSubmit(data: z.infer<typeof formSchema>) {
-    console.log(data)
-
+  async function onSubmit(data: z.infer<typeof formSchema>) {
+    // console.log(data)
+    setIsBusy(true)
+    try {
+      await signUpUser(data.username, data.password)
+      setIsAuthorized(true)
+      try {
+        await setInfo({
+          displayName: data.knownAs,
+          photoURL: "",
+          email: data.username,
+        })
+      } catch (error) {
+        toast.error("Could not update profile, please try again", { position: "top-center" })
+        setIsBusy(false)
+      }
+      rrNavigate("/", { replace: true })
+    } catch (error) {
+      toast.error("Could not create an account, please try again", { position: "top-center" })
+      setIsBusy(false)
+    }
   }
-
-  // const handleSignUpUser = async (e: React.FormEvent<HTMLFormElement | HTMLButtonElement>) => {
-  //   e.preventDefault()
-  //   if (username.current?.value && password.current?.value) {
-  //     if (usernameRegex.test(username.current.value) && passwordRegex.test(password.current.value)) {
-  //       setIsBusy(true)
-  //       try {
-  //         await signUpUser(username.current.value, password.current.value)
-  //         setIsAuthorized(true)
-  //         rrNavigate("/", { replace: true })
-  //       } catch (error) {
-  //         toast.error("Sign up error, try again", { position: "top-center" })
-  //         setIsBusy(false)
-  //         password.current.value = ""
-  //       }
-  //     } else {
-  //       toast.warning("Username or password does not comply", { position: "top-center" })
-  //     }
-  //   } else {
-  //     toast.warning("Please provide both username and password", { position: "top-center" })
-  //   }
-  // }
 
   return (
     <div className="max-w-md mx-auto">
@@ -81,18 +80,35 @@ export default function SignUpUser() {
           <form id="form-sign-up" onSubmit={signUpForm.handleSubmit(onSubmit)}>
             <FieldGroup>
               <Controller
+                name="knownAs"
+                control={signUpForm.control}
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid}>
+                    <FieldLabel htmlFor="form-sign-up-knownas">Name</FieldLabel>
+                    <Input
+                      {...field}
+                      type="text"
+                      id="form-sign-up-knownas"
+                      aria-invalid={fieldState.invalid}
+                      placeholder="First name, nickname or known as"
+                    />
+                    {fieldState.invalid && (<FieldError errors={[fieldState.error]} />)}
+                  </Field>
+                )}
+              />
+              <Controller
                 name="username"
                 control={signUpForm.control}
                 render={({ field, fieldState }) => (
                   <Field data-invalid={fieldState.invalid}>
-                    <FieldLabel htmlFor="form-sign-up-username">Username</FieldLabel>
+                    <FieldLabel htmlFor="form-sign-up-username">Email Address</FieldLabel>
                     <Input
                       {...field}
                       type="email"
                       id="form-sign-up-username"
                       aria-invalid={fieldState.invalid}
                       placeholder="name@domain.com"
-                      // autoComplete="off"
+                    // autoComplete="off"
                     />
                     {fieldState.invalid && (<FieldError errors={[fieldState.error]} />)}
                   </Field>
@@ -104,13 +120,18 @@ export default function SignUpUser() {
                 render={({ field, fieldState }) => (
                   <Field data-invalid={fieldState.invalid}>
                     <FieldLabel htmlFor="form-sign-up-password">Password</FieldLabel>
-                    <Input
-                      {...field}
-                      type="password"
-                      id="form-sign-up-password"
-                      aria-invalid={fieldState.invalid}
+                    <InputGroup>
+                      <InputGroupInput
+                        {...field}
+                        type={showPassword ? "text" : "password"}
+                        id="form-sign-up-password"
+                        aria-invalid={fieldState.invalid}
                       // autoComplete="off"
-                    />
+                      />
+                      <InputGroupAddon align="inline-end">
+                        <InputGroupButton variant="secondary" onClick={() => setShowPassword(!showPassword)}>{showPassword ? "hide" : "show"}</InputGroupButton>
+                      </InputGroupAddon>
+                    </InputGroup>
                     {fieldState.invalid && (<FieldError errors={[fieldState.error]} />)}
                   </Field>
                 )}
@@ -128,8 +149,9 @@ export default function SignUpUser() {
         </CardContent>
         <CardFooter>
           <Field orientation="horizontal">
-            <Button type="button" variant="outline" onClick={() => signUpForm.reset()}>Reset</Button>
-            <Button type="submit" form="form-sign-up">Submit</Button>
+            <Button type="button" variant="outline" disabled={isBusy} onClick={() => signUpForm.reset()}>Reset</Button>
+            <Button type="submit" className="grow" disabled={isBusy || getIsAuthorized()} form="form-sign-up">Submit</Button>
+            <Button type="button" variant="outline" disabled={isBusy} onClick={() => rrNavigate(-1)}>Back</Button>
           </Field>
         </CardFooter>
       </Card>
