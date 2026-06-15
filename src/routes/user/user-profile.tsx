@@ -1,70 +1,87 @@
-import { useRef, useState } from 'react'
+import { useState } from 'react'
 import { useNavigate } from 'react-router'
+import { Controller, useForm } from "react-hook-form"
+import * as z from "zod"
+import { zodResolver } from "@hookform/resolvers/zod"
 
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
+import { toast } from "sonner"
+import { Input } from "@/components/ui/input"
+import { Button } from "@/components/ui/button"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { Separator } from "@/components/ui/separator"
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { Field, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field"
+import { InputGroup, InputGroupAddon, InputGroupButton, InputGroupInput } from "@/components/ui/input-group"
 
 import useAuth from '@/hooks/useAuth'
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Field, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field"
-import { Separator } from "@/components/ui/separator"
 import type { TUserInfoType } from "@/types/firestore-types"
 
 // https://picsum.photos/
+
+const formSchema = z.object({
+  knownAs: z.string().min(2, "Not a valid name").max(30, "Name is too long"),
+  username: z
+    .string()
+    .regex(/^\S+@\S+\.\S+$/, "Username must be a valid email address"),
+  password: z
+    .string()
+    .min(8, "Password must be at least 8 characters long")
+    .regex(/[A-Z]/, "Password must contain at least one uppercase letter")
+    .regex(/[a-z]/, "Password must contain at least one lowercase letter")
+    .regex(/[0-9]/, "Password must contain at least one number")
+    .regex(/[^A-Za-z0-9]/, "Password must contain at least one special character")
+    .optional().or(z.literal(""))
+})
 
 export default function UserProfile() {
   const rrNavigate = useNavigate()
   const { getInfo, setInfo, setEmail, setPassword, getUID, getIsAdmin } = useAuth()
   const [isBusy, setIsBusy] = useState(false)
   const currentValues: TUserInfoType = getInfo()
-  const nameRef = useRef<HTMLInputElement | null>(null)
-  const photoRef = useRef<HTMLInputElement | null>(null)
-  const emailRef = useRef<HTMLInputElement | null>(null)
-  const passwordRef = useRef<HTMLInputElement | null>(null)
+  const [showPassword, setShowPassword] = useState(false)
+  const profileForm = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      knownAs: currentValues.displayName || "",
+      username: currentValues.email || "",
+      password: "",
+    },
+  })
 
-  const handleUpdateUser = async (e: React.FormEvent<HTMLFormElement | HTMLButtonElement>) => {
-    e.preventDefault()
+  async function handleUpdateProfile(data: z.infer<typeof formSchema>) {
     setIsBusy(true)
 
-    if (nameRef.current !== null && emailRef.current !== null && photoRef.current !== null) {
-      const isValid = true // Fixed value for now. Need implementation
-      if (
-        currentValues.displayName !== nameRef.current.value ||
-        currentValues.photoURL !== photoRef.current.value
-      ) {
-        if (isValid) {
-          try {
-            await setInfo({
-              displayName: nameRef.current.value,
-              photoURL: photoRef.current.value,
-              email: emailRef.current.value,
-            })
-          } catch (error) {
-            console.log(error)
-          }
-        }
+    if (
+      currentValues.displayName !== data.knownAs ||
+      currentValues.email !== data.username
+    ) {
+      try {
+        await setInfo({
+          displayName: data.knownAs,
+          email: data.username,
+          photoURL: ""
+        })
+      } catch (error) {
+        return null
       }
     }
 
-    if (emailRef.current !== null && currentValues.email !== emailRef.current.value) {
-      const isEmailValid = true // Fixed value for now. Need implementation
-      if (isEmailValid && emailRef.current.value !== getInfo().email) {
-        try {
-          await setEmail(emailRef.current.value)
-        } catch (error) {
-          console.log(error)
-        }
+    if (
+      currentValues.email !== data.username &&
+      currentValues.displayName === data.knownAs
+    ) {
+      try {
+        await setEmail(data.username)
+      } catch (error) {
+        console.log(error)
       }
     }
 
-    if (passwordRef.current !== null) {
-      const isPasswordValid = true // Fixed value for now. Need implementation
-      if (isPasswordValid) {
-        try {
-          await setPassword(passwordRef.current.value)
-        } catch (error) {
-          console.log(error)
-        }
+    if (data.password !== null) {
+      try {
+        await setPassword(data.password || "")
+      } catch (error) {
+        console.log(error)
       }
     }
 
@@ -73,64 +90,97 @@ export default function UserProfile() {
   }
 
   return (
-    <div className="max-w-md mx-auto space-y-3 px-3 sm:px-0">
-      <p className="">View or amend your user profile data.</p>
-      <form className="space-y-2" onSubmit={handleUpdateUser}>
-        <FieldGroup>
-          <Field>
-            <FieldLabel htmlFor="user-details-name">Name</FieldLabel>
-            <Input
-              id="user-details-name"
-              ref={nameRef}
-              type="text"
-              placeholder="Display name"
-              // defaultValue={getInfo().displayName || undefined} />
-              defaultValue={currentValues.displayName || undefined} />
+    <div className="max-w-md mx-auto">
+      <Card>
+        <CardHeader>
+          <CardTitle>Update your user details</CardTitle>
+          <CardDescription>
+            Your details can be updated and saved.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <form id="form-profile" onSubmit={profileForm.handleSubmit(handleUpdateProfile)}>
+            <FieldGroup>
+              <Controller
+                name="knownAs"
+                control={profileForm.control}
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid}>
+                    <FieldLabel htmlFor="form-profile-knownas">Name</FieldLabel>
+                    <Input
+                      {...field}
+                      type="text"
+                      id="form-profile-knownas"
+                      aria-invalid={fieldState.invalid}
+                      placeholder="First name, nickname or known as"
+                    />
+                    {fieldState.invalid && (<FieldError errors={[fieldState.error]} />)}
+                  </Field>
+                )}
+              />
+              <Controller
+                name="username"
+                control={profileForm.control}
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid}>
+                    <FieldLabel htmlFor="form-profile-username">Email Address</FieldLabel>
+                    <Input
+                      {...field}
+                      type="email"
+                      id="form-profile-username"
+                      aria-invalid={fieldState.invalid}
+                      placeholder="name@domain.com"
+                    // autoComplete="off"
+                    />
+                    {fieldState.invalid && (<FieldError errors={[fieldState.error]} />)}
+                  </Field>
+                )}
+              />
+              <Controller
+                name="password"
+                control={profileForm.control}
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid}>
+                    <FieldLabel htmlFor="form-profile-password">Password</FieldLabel>
+                    <InputGroup>
+                      <InputGroupInput
+                        {...field}
+                        type={showPassword ? "text" : "password"}
+                        id="form-profile-password"
+                        aria-invalid={fieldState.invalid}
+                        placeholder="leave blank if unchanged"
+                      // autoComplete="off"
+                      />
+                      <InputGroupAddon align="inline-end">
+                        <InputGroupButton variant="secondary" onClick={() => setShowPassword(!showPassword)}>{showPassword ? "hide" : "show"}</InputGroupButton>
+                      </InputGroupAddon>
+                    </InputGroup>
+                    {fieldState.invalid && (<FieldError errors={[fieldState.error]} />)}
+                  </Field>
+                )}
+              />
+            </FieldGroup>
+          </form>
+          <p className="mt-4 text-sm">Typical requirements for a "strong" password include:</p>
+          <ul className="text-sm">
+            <li>- A minimum length (commonly 8 characters or more).</li>
+            <li>- At least one uppercase letter.</li>
+            <li>- At least one lowercase letter.</li>
+            <li>- At least one number (digit).</li>
+            <li>- At least one special character (e.g. !  @  #  $  %).</li>
+          </ul>
+          <Separator className="my-3" />
+          <p>Email validated: {currentValues.emailVerified ? 'YES' : 'NO'}</p>
+          <p>Administrator: {getIsAdmin() ? 'YES' : 'NO'}</p>
+          <p>User ID: {getUID()}</p>
+        </CardContent>
+        <CardFooter className="mt-5">
+          <Field orientation="horizontal">
+            <Button type="submit" className="grow" disabled={isBusy} form="form-profile">Submit</Button>
+            <Button type="button" variant="outline" disabled={isBusy} onClick={() => rrNavigate(-1)}>Back</Button>
           </Field>
-          <Field>
-            <FieldLabel htmlFor="user-details-photo">Photo URL</FieldLabel>
-            <Input
-              id="user-details-photo"
-              ref={photoRef}
-              type="url"
-              placeholder="Photo URL"
-              defaultValue={currentValues.photoURL || undefined} />
-          </Field>
-          <div className="grid grid-cols-2 gap-4">
-            <Field>
-              <FieldLabel htmlFor="user-details-email">Email</FieldLabel>
-              <Input
-                id="user-details-email"
-                ref={emailRef}
-                type="email"
-                placeholder="Email"
-                defaultValue={currentValues.email || undefined} />
-            </Field>
-            <Field>
-              <FieldLabel htmlFor="user-details-password">Password</FieldLabel>
-              <Input
-                id="user-details-password"
-                ref={passwordRef}
-                type="password"
-                placeholder="Leave blank if unchanged" />
-            </Field>
-          </div>
-        </FieldGroup>
-      </form>
-      <Separator />
-      <div className="space-x-2">
-        <Button onClick={handleUpdateUser} type="submit" disabled={isBusy}>Save</Button>
-        {/* <Button onClick={() => { }} disabled={isBusy}>Reset Password</Button> */}
-        <Button onClick={() => rrNavigate(-1)} disabled={isBusy}>Back</Button>
-      </div>
-      <Separator />
-      <p>Email validated: {currentValues.emailVerified ? 'YES' : 'NO'}</p>
-      <p>Administrator: {getIsAdmin() ? 'YES' : 'NO'}</p>
-      <p>{getUID()}</p>
-      <Avatar>
-        <AvatarImage src={currentValues.photoURL || undefined} alt={currentValues.email || undefined} />
-        <AvatarFallback>CN</AvatarFallback>
-      </Avatar>
+        </CardFooter>
+      </Card>
     </div>
   )
 }

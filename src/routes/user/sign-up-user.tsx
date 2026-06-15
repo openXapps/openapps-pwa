@@ -147,7 +147,7 @@ export default function SignUpUser() {
             <li>- At least one special character (e.g. !  @  #  $  %).</li>
           </ul>
         </CardContent>
-        <CardFooter>
+        <CardFooter className="mt-5">
           <Field orientation="horizontal">
             <Button type="button" variant="outline" disabled={isBusy} onClick={() => signUpForm.reset()}>Reset</Button>
             <Button type="submit" className="grow" disabled={isBusy || getIsAuthorized()} form="form-sign-up">Submit</Button>

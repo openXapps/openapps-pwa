@@ -1,99 +1,122 @@
-import { useRef, useState } from "react"
-import { Link, useNavigate } from "react-router"
+import { useState } from "react"
+import { useNavigate } from "react-router"
+import { Controller, useForm } from "react-hook-form"
+import * as z from "zod"
+import { zodResolver } from "@hookform/resolvers/zod"
 
+import { toast } from "sonner"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { Field, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field"
+import { InputGroup, InputGroupAddon, InputGroupButton, InputGroupInput } from "@/components/ui/input-group"
 
 import useAuth from "@/hooks/useAuth"
-import { Field, FieldDescription, FieldGroup, FieldLabel } from "@/components/ui/field"
-import { toast } from "sonner"
 
 // const isErrorInit: { status: boolean, message: string } = { status: false, message: "" }
 
-// For emulation testing
-const testUser = "john@domain.com"
-const testPass = "password"
+const formSchema = z.object({
+  username: z
+    .string()
+    .regex(/^\S+@\S+\.\S+$/, "Username must be a valid email address"),
+  password: z
+    .string()
+    // .min(8, "Password must be at least 8 characters long")
+    // .regex(/[A-Z]/, "Password must contain at least one uppercase letter")
+    // .regex(/[a-z]/, "Password must contain at least one lowercase letter")
+    // .regex(/[0-9]/, "Password must contain at least one number")
+    // .regex(/[^A-Za-z0-9]/, "Password must contain at least one special character")
+})
 
 export default function SignInUser() {
   const rrNavigate = useNavigate()
   const { signInUser, setIsAuthorized, getIsAuthorized, setIsAdmin } = useAuth()
-  const username = useRef<HTMLInputElement | null>(null)
-  const password = useRef<HTMLInputElement | null>(null)
   const [isBusy, setIsBusy] = useState(false)
-  // https://uibakery.io/regex-library/password
-  const usernameRegex = /^\S+@\S+\.\S+$/
+  const [showPassword, setShowPassword] = useState(false)
+  const signInForm = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      username: "john@domain.com",
+      password: "password",
+    },
+  })
 
-  const handleSignInUser = async (e: React.SubmitEvent<HTMLFormElement | HTMLButtonElement>) => {
-    e.preventDefault()
-    if (username.current?.value && password.current?.value) {
-      if (usernameRegex.test(username.current.value)) {
-        setIsBusy(true)
-        try {
-          await signInUser(username.current.value, password.current.value)
-          // isError && setIsError(isErrorInit)
-          setIsAuthorized(true)
-          setIsAdmin()
-          rrNavigate("/", { replace: true })
-        } catch (error) {
-          // setIsError({ status: true, message: "Sign in error, try again" })
-          toast.error("Sign in error, try again", { position: "top-center" })
-          setIsBusy(false)
-          password.current.value = ""
-        }
-      } else {
-        toast.warning("Username is not a valid email address", { position: "top-center" })
-      }
-    } else {
-      // setIsError({ status: true, message: "Provide both username and password" })
-      toast.warning("Please provide both username and password", { position: "top-center" })
+  async function onSubmit(data: z.infer<typeof formSchema>) {
+    setIsBusy(true)
+    try {
+      await signInUser(data.username, data.password)
+      setIsAuthorized(true)
+      setIsAdmin()
+      rrNavigate("/", { replace: true })
+    } catch (error) {
+      toast.error("Sign in error, try again", { position: "top-center" })
+      setIsBusy(false)
     }
   }
 
-  // const handleClearFields = () => {
-  //   if (username.current != undefined) username.current.value = ""
-  //   if (password.current != undefined) password.current.value = ""
-  //   setIsError(isErrorInit)
-  //   username.current?.focus()
-  // }
-
   return (
-    <div className="max-w-md mx-auto space-y-3 px-3 sm:px-0">
-      <p className="">Welcome to OpenApps. Please provide an email and password to sign-in.</p>
-      <form action="" onSubmit={handleSignInUser}>
-        <FieldGroup>
-          <Field>
-            <FieldLabel htmlFor="sign-up-email">Email</FieldLabel>
-            <Input
-              id="sign-up-email"
-              defaultValue={testUser}
-              type="text"
-              placeholder="name@example.com"
-              ref={username}
-            />
+    <div className="max-w-md mx-auto">
+      <Card>
+        <CardHeader>
+          <CardTitle>Sign-in with your existing account</CardTitle>
+          <CardDescription>
+            Welcome back to OpenApps. Please provide an email and password to sign-in.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <form id="form-sign-up" onSubmit={signInForm.handleSubmit(onSubmit)}>
+            <FieldGroup>
+              <Controller
+                name="username"
+                control={signInForm.control}
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid}>
+                    <FieldLabel htmlFor="form-sign-in-username">Email Address</FieldLabel>
+                    <Input
+                      {...field}
+                      type="email"
+                      id="form-sign-in-username"
+                      aria-invalid={fieldState.invalid}
+                      placeholder="name@domain.com"
+                    // autoComplete="off"
+                    />
+                    {fieldState.invalid && (<FieldError errors={[fieldState.error]} />)}
+                  </Field>
+                )}
+              />
+              <Controller
+                name="password"
+                control={signInForm.control}
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid}>
+                    <FieldLabel htmlFor="form-sign-up-password">Password</FieldLabel>
+                    <InputGroup>
+                      <InputGroupInput
+                        {...field}
+                        type={showPassword ? "text" : "password"}
+                        id="form-sign-up-password"
+                        aria-invalid={fieldState.invalid}
+                      // autoComplete="off"
+                      />
+                      <InputGroupAddon align="inline-end">
+                        <InputGroupButton variant="secondary" onClick={() => setShowPassword(!showPassword)}>{showPassword ? "hide" : "show"}</InputGroupButton>
+                      </InputGroupAddon>
+                    </InputGroup>
+                    {fieldState.invalid && (<FieldError errors={[fieldState.error]} />)}
+                  </Field>
+                )}
+              />
+            </FieldGroup>
+          </form>
+        </CardContent>
+        <CardFooter className="mt-5">
+          <Field orientation="horizontal">
+            <Button type="button" variant="outline" disabled={isBusy} onClick={() => signInForm.reset()}>Reset</Button>
+            <Button type="submit" className="grow" disabled={isBusy || getIsAuthorized()} form="form-sign-up">Submit</Button>
+            <Button type="button" variant="outline" disabled={isBusy} onClick={() => rrNavigate(-1)}>Back</Button>
           </Field>
-          <Field>
-            <div className="flex items-center">
-              <FieldLabel htmlFor="sign-up-password">Password</FieldLabel>
-              {/* <Link to="/" className="ml-auto inline-block text-sm underline-offset-4 hover:underline"
-              >Forgot your password?</Link> */}
-            </div>
-            <Input
-              id="sign-up-password"
-              defaultValue={testPass}
-              type="password"
-              ref={password}
-            />
-            <FieldDescription>For now, if you forgot your password, it cannot be recovered</FieldDescription>
-          </Field>
-          <Field>
-            <Button disabled={isBusy || getIsAuthorized()} type="submit">Sign In</Button>
-            <FieldDescription className="text-center">
-              Don&apos;t have an account? <Link to="/signup">Sign up</Link>
-            </FieldDescription>
-          </Field>
-        </FieldGroup>
-      </form>
-      {getIsAuthorized() && <p className="text-green-400 mt-3">You authorized</p>}
+        </CardFooter>
+      </Card>
     </div>
   )
 }
