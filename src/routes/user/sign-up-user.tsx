@@ -104,7 +104,7 @@ export default function SignUpUser() {
                     <FieldLabel htmlFor="form-sign-up-username">Email Address</FieldLabel>
                     <Input
                       {...field}
-                      type="email"
+                      type="text"
                       id="form-sign-up-username"
                       aria-invalid={fieldState.invalid}
                       placeholder="name@domain.com"

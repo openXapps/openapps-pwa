@@ -74,7 +74,7 @@ export default function SignInUser() {
                     <FieldLabel htmlFor="form-sign-in-username">Email Address</FieldLabel>
                     <Input
                       {...field}
-                      type="email"
+                      type="text"
                       id="form-sign-in-username"
                       aria-invalid={fieldState.invalid}
                       placeholder="name@domain.com"
