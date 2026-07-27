@@ -9,10 +9,10 @@ const emojis = { grinningFaceWithBigEyes: "😃" }
 
 type DisclaimerProps = {
   cookieAccepted: boolean
-  handleAcceptCookies: () => void
+  createTcCookie: () => void
 }
 
-export default function Disclaimer({ cookieAccepted, handleAcceptCookies }: DisclaimerProps) {
+export default function Disclaimer({ cookieAccepted, createTcCookie }: DisclaimerProps) {
   const [tcOpen, setTcOpen] = useState(false)
   const [tcClicked, setTcClicked] = useState(false)
 
@@ -61,7 +61,7 @@ export default function Disclaimer({ cookieAccepted, handleAcceptCookies }: Disc
               setTcClicked(false)
               setTcOpen(true)
             }}>Please read the Terms and Conditions</Button>}
-            <Button variant="default" onClick={handleAcceptCookies} disabled={!tcClicked}>I Accept</Button>
+            <Button variant="default" onClick={createTcCookie} disabled={!tcClicked}>I Accept</Button>
             <p className="text-center">This message will be removed for 30 days once accepted</p>
           </>
         )}

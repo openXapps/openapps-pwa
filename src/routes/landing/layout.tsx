@@ -20,10 +20,7 @@ export default function Layout() {
       <div className="">
         <AppBar />
       </div>
-      {/* <div className="mx-auto sm:container max-w-5xl"> */}
-      {/* <div className="mx-auto max-w-5xl mt-18"> */}
-      {/* <div className="mt-14 md:mt-16 mb-12"> */}
-      <div className="mt-14 mb-12">
+      <div className="mt-15 mb-12 mx-2 sm:mx-0">
         <Outlet />
       </div>
     </>

@@ -132,7 +132,7 @@ export default function AppModules() {
   }
 
   return (
-    <div className="mx-auto max-w-screen-sm px-3 sm:px-0 space-y-3">
+    <div className="mx-auto max-w-screen-sm space-y-3">
       <p className="">Configure OpenApps web modules.</p>
       <div className="">
         <form className="flex gap-5 justify-between items-center border border-slate-400 rounded-lg p-3" action="" onSubmit={handleSaveModule}>

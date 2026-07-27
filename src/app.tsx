@@ -4,6 +4,7 @@ import { ThemeProvider } from "@/context/ThemeProvider"
 import { AuthProvider } from "@/context/AuthProvider"
 import { FirestoreProvider } from "./context/FirestoreProvider"
 import { RouteProvider } from "./context/RouteProvider"
+import { AppProvider } from "./context/AppProvider"
 
 export default function App() {
   return (
@@ -11,7 +12,9 @@ export default function App() {
       <FirestoreProvider>
         <AuthProvider>
           <RouteProvider>
-            <Router />
+            <AppProvider>
+              <Router />
+            </AppProvider>
           </RouteProvider>
         </AuthProvider>
       </FirestoreProvider>

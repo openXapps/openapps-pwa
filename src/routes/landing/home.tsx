@@ -8,15 +8,16 @@ import AppCard from "@/components/AppCard"
 
 import type { SAppModule } from "@/schemas/app-schemas"
 import type { TGetAllDocumentsProps } from "@/types/firestore-types"
-import useFirestore from "@/hooks/useFirestore"
 import { appModuleConverter } from "@/lib/converter"
+import useFirestore from "@/hooks/useFirestore"
+import useAppContext from "@/hooks/useAppContext"
 
-const cookieName = "openapps_accept_t&c"
+// const cookieName = "openapps_accept_t&c"
 
 export default function Home() {
   const { isLoading, getAllDocuments } = useFirestore()
+  const { appContext, createTcCookie } = useAppContext()
   const [appModules, setAppModules] = useState<SAppModule[]>([])
-  const [cookieAccepted, setCookiesAccepted] = useState(true)
   const [isError, setIsError] = useState({ ok: true, message: "" })
   const [retry, setRetry] = useState(0)
 
@@ -33,22 +34,6 @@ export default function Home() {
     fetchData()
     return () => { }
   }, [retry])
-
-  useEffect(() => {
-    const cookies = decodeURIComponent(document.cookie)
-    if (!cookieAccepted && cookies.indexOf(cookieName + "=Yes") > -1) setCookiesAccepted(true)
-    if (cookieAccepted && cookies.indexOf(cookieName + "=Yes") === -1) setCookiesAccepted(false)
-
-    return () => { }
-  }, [cookieAccepted])
-
-  function handleAcceptCookies() {
-    let d = new Date()
-    d.setTime(d.getTime() + (30 * 24 * 60 * 60 * 1000))
-    const expires = `expires=${d.toUTCString()}`
-    document.cookie = `${cookieName}=Yes;expires=${expires};`
-    setCookiesAccepted(true)
-  }
 
   function handleRetry() {
     setRetry(prevState => prevState + 1)
@@ -74,12 +59,16 @@ export default function Home() {
               )
               : (appModules.map((v, i) => {
                 let isEven: boolean = i % 2 == 0
-                return v.isActive && <AppCard key={v.id} app={v} cookieAccepted={cookieAccepted} isEven={isEven} />
+                return v.isActive && <AppCard
+                  key={v.id}
+                  app={v}
+                  cookieAccepted={appContext.appState.cookieAccepted}
+                  isEven={isEven} />
               }))
           )
         }
       </div>
-      <Disclaimer cookieAccepted={cookieAccepted} handleAcceptCookies={handleAcceptCookies} />
+      <Disclaimer cookieAccepted={appContext.appState.cookieAccepted} createTcCookie={createTcCookie} />
     </>
   )
 }

@@ -4,6 +4,7 @@ import { Link, useLocation, useNavigate } from "react-router"
 import useAuth from "@/hooks/useAuth"
 import useTheme from "@/hooks/useTheme"
 import useRouteContext from "@/hooks/useRouteContext"
+import useAppContext from "@/hooks/useAppContext"
 
 import {
   DropdownMenu,
@@ -24,6 +25,7 @@ export default function AppBar() {
   const { setRouteId } = useRouteContext()
   const { theme, setTheme } = useTheme()
   const [isBusy, setIsBusy] = useState(false)
+  const { appContext } = useAppContext()
 
   useEffect(() => {
     // console.log(rrLocation.pathname)
@@ -61,7 +63,7 @@ export default function AppBar() {
   return (
     <div className="fixed left-0 top-0 w-full z-10 bg-muted">
       <div className="max-w-3xl mx-auto flex justify-between items-center py-2 px-2 md:px-0">
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-1 md:gap-3">
           <Link to="/">
             <img className="w-6" src={logo} alt="openapps logo" />
           </Link>
@@ -88,8 +90,16 @@ export default function AppBar() {
               </DropdownMenu>
             ) : (
               <div className="space-x-1">
-                <Button variant="outline" onClick={() => rrNavigate("/signin")}>Sign In</Button>
-                <Button variant="outline" onClick={() => rrNavigate("/signup")}>Sign Up</Button>
+                <Button
+                  variant="outline"
+                  onClick={() => rrNavigate("/signin")}
+                  disabled={!appContext.appState.cookieAccepted}
+                >Sign In</Button>
+                <Button
+                  variant="outline"
+                  onClick={() => rrNavigate("/signup")}
+                  disabled={!appContext.appState.cookieAccepted}
+                >Sign Up</Button>
               </div>
             )}
           </div>
