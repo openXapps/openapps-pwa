@@ -49,7 +49,7 @@ export default function SignInUser() {
       setIsAdmin()
       rrNavigate("/", { replace: true })
     } catch (error) {
-      toast.error("Sign in error, try again", { position: "top-center" })
+      toast.error("Sign in error, try again", { position: "bottom-center" })
       setIsBusy(false)
     }
   }

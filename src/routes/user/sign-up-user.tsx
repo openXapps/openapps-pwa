@@ -57,12 +57,12 @@ export default function SignUpUser() {
           email: data.username,
         })
       } catch (error) {
-        toast.error("Could not update profile, please try again", { position: "top-center" })
+        toast.error("Could not update profile, please try again", { position: "bottom-center" })
         setIsBusy(false)
       }
       rrNavigate("/", { replace: true })
     } catch (error) {
-      toast.error("Could not create an account, please try again", { position: "top-center" })
+      toast.error("Could not create an account, please try again", { position: "bottom-center" })
       setIsBusy(false)
     }
   }
