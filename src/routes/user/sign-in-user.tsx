@@ -109,7 +109,7 @@ export default function SignInUser() {
             </FieldGroup>
           </form>
         </CardContent>
-        <CardFooter className="mt-5">
+        <CardFooter className="mt-2">
           <Field orientation="horizontal">
             <Button type="button" variant="outline" disabled={isBusy} onClick={() => signInForm.reset()}>Reset</Button>
             <Button type="submit" className="grow" disabled={isBusy || getIsAuthorized()} form="form-sign-up">Submit</Button>
