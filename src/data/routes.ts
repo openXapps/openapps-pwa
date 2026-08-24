@@ -1,7 +1,4 @@
-export type TRoutes = {
-  routeId: string
-  routeTitle: string
-}
+import type { TRoutes } from "@/types/route-types"
 
 export const routes: TRoutes[] = [
   {

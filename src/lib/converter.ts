@@ -47,7 +47,9 @@ function createConverter<T extends SFirestoreExtention>(): FirestoreDataConverte
       // console.log("To FB:", id, createdAt, updatedAt, data);
 
       // Firestore only accepts plain objects, not DocumentData that includes the ID
-      // if (createdAt instanceof Date) {
+      // Validate if we are pushing a new or existing record to Firestore.
+      // If it's a new record, we set the createdAt to serverTimestamp(), 
+      // otherwise we keep the existing createdAt.
       if (id.length > 0) {
         return {
           ...data,

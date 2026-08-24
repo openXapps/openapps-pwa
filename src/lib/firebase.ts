@@ -19,5 +19,5 @@ export const db = getFirestore(app)
 // DEVELOPMENT
 // Modify this instance to communicate with the Cloud Firestore emulator.
 // Note: This function must be called before this instance has been used to do any operations.
-// connectFirestoreEmulator(db, '127.0.0.1', 8080)
-connectFirestoreEmulator(db, '192.168.1.156', 8080)
+connectFirestoreEmulator(db, '127.0.0.1', 8080)
+// connectFirestoreEmulator(db, '192.168.1.156', 8080)

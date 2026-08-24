@@ -8,8 +8,8 @@ import type { TAuthContextState, TAuthContextType } from "@/types/auth-context-t
 // PRODUCTION
 export const auth = getAuth(app)
 // DEVELOPMENT
-// connectAuthEmulator(auth, "http://127.0.0.1:9099")
-connectAuthEmulator(auth, "http://192.168.1.156:9099")
+connectAuthEmulator(auth, "http://127.0.0.1:9099")
+// connectAuthEmulator(auth, "http://192.168.1.156:9099")
 
 const initAppContextState: TAuthContextState = {
   auth: auth,
