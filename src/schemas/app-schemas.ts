@@ -5,5 +5,6 @@ export type SAppModule = SFirestoreExtention & {
   moduleName: string
   moduleDesc: string | null
   url: string
+  image: string | null
   order: number
 }

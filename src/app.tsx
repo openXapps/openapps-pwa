@@ -8,7 +8,7 @@ import { AppProvider } from "./context/AppProvider"
 
 export default function App() {
   return (
-    <ThemeProvider defaultTheme="system" storageKey="home-theme">
+    <ThemeProvider defaultTheme="system" storageKey="openapps-theme">
       <FirestoreProvider>
         <AuthProvider>
           <RouteProvider>

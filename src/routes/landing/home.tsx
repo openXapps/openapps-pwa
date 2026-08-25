@@ -4,7 +4,8 @@ import { Button } from "@/components/ui/button"
 import { Spinner } from "@/components/ui/spinner"
 
 import Disclaimer from "@/routes/landing/disclaimer"
-import AppCard from "@/components/AppCard"
+// import AppCard from "@/components/AppCard"
+import AppCard from "@/components/AppCard-New"
 
 import type { SAppModule } from "@/schemas/app-schemas"
 import type { TGetAllDocumentsProps } from "@/types/firestore-types"
@@ -57,14 +58,16 @@ export default function Home() {
                   <Button variant="outline" onClick={handleRetry}>Lets reload the page - Attempt {retry}</Button>
                 </div>
               )
-              : (appModules.map((v, i) => {
-                let isEven: boolean = i % 2 == 0
-                return v.isActive && <AppCard
-                  key={v.id}
-                  app={v}
-                  cookieAccepted={appContext.appState.cookieAccepted}
-                  isEven={isEven} />
-              }))
+              : (<div className="max-w-3xl flex flex-col gap-6 items-center mx-auto">
+                {appModules.map((v, i) => {
+                  let isEven: boolean = i % 2 == 0
+                  return v.isActive && <AppCard
+                    key={v.id}
+                    app={v}
+                    cookieAccepted={appContext.appState.cookieAccepted}
+                    isEven={isEven} />
+                })}
+              </div>)
           )
         }
       </div>
