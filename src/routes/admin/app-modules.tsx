@@ -29,7 +29,7 @@ import {
   DialogTrigger
 } from "@/components/ui/dialog"
 
-import { Pencil, Save, Trash2, Undo2 } from "lucide-react"
+import { Pencil, Save, Trash2, Undo2, Plus } from "lucide-react"
 
 type Modes = "NEW" | "SET"
 
@@ -81,6 +81,7 @@ export default function AppModules() {
   // const moduleOrderRef = useRef<HTMLInputElement>(null)
   const [moduleIsActive, setModuleIsActive] = useState(initCurrentAppModule.isActive)
   const [appModules, setAppModules] = useState<SAppModule[]>([])
+  const [showForm, setShowForm] = useState(true)
   const [saveMode, setSaveMode] = useState<Modes>("NEW")
   const [dialogOpen, setDialogOpen] = useState(false)
   const moduleForm = useForm<z.infer<typeof formSchema>>({
@@ -191,9 +192,11 @@ export default function AppModules() {
 
   return (
     <div className="mx-auto max-w-screen-sm space-y-3">
-      <p className="">Configure OpenApps web modules.</p>
-      <div className="">
-        {/* <form className="flex gap-5 justify-between items-center border border-slate-400 rounded-lg p-3" action="" onSubmit={handleSaveModule}> */}
+      <div className="flex justify-between items-center">
+        <p className="">Configure OpenApps web modules.</p>
+        <Button variant="outline" size="icon" onClick={(e) => { e.preventDefault() }}><Plus /></Button>
+      </div>
+      {showForm && (
         <form id="form-module" onSubmit={moduleForm.handleSubmit(handleUpdateModule)}>
           <div className="flex gap-5 justify-between items-center border border-slate-400 rounded-lg p-3">
             <div className="space-y-2 w-full">
@@ -209,7 +212,7 @@ export default function AppModules() {
                         type="text"
                         id="form-module-name"
                         aria-invalid={fieldState.invalid}
-                        // placeholder="Module name"
+                      // placeholder="Module name"
                       />
                       {fieldState.invalid && (<FieldError errors={[fieldState.error]} />)}
                     </Field>
@@ -226,7 +229,7 @@ export default function AppModules() {
                         className="field-sizing-content"
                         id="form-module-desc"
                         aria-invalid={fieldState.invalid}
-                        // placeholder="Module description"
+                      // placeholder="Module description"
                       />
                       {fieldState.invalid && (<FieldError errors={[fieldState.error]} />)}
                     </Field>
@@ -243,49 +246,50 @@ export default function AppModules() {
               </FieldGroup>
             </div>
             <div className="flex flex-col gap-1">
-              {/* <Button type="submit" variant="outline" size="icon" onClick={handleSaveModule}><Save /></Button>
+              <Button type="submit" variant="outline" size="icon" onClick={moduleForm.handleSubmit(handleUpdateModule)}><Save /></Button>
               <Button type="submit" variant="outline" size="icon" disabled={!currentAppModule.id} onClick={handleReset}><Undo2 /></Button>
               <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-                <DialogTrigger asChild>
-                  <Button variant="destructive" size="icon" disabled={!currentAppModule.id}><Trash2 /></Button>
-                </DialogTrigger>
-                <DialogContent className="sm:max-w-100">
-                  <DialogHeader>
-                    <DialogTitle>Confirm delete</DialogTitle>
-                    <DialogDescription>Please confirm you are deleting {currentAppModule.moduleName} module from the database?</DialogDescription>
-                  </DialogHeader>
-                  <DialogFooter>
-                    <DialogClose asChild>
-                      <Button variant="outline">Cancel</Button>
-                    </DialogClose>
-                    <Button variant="outline" onClick={handleDeleteModule}>Confirm</Button>
-                  </DialogFooter>
-                </DialogContent>
-              </Dialog>
-            </div> */}
+        <DialogTrigger asChild>
+          <Button variant="destructive" size="icon" disabled={!currentAppModule.id}><Trash2 /></Button>
+        </DialogTrigger>
+        <DialogContent className="sm:max-w-100">
+          <DialogHeader>
+            <DialogTitle>Confirm delete</DialogTitle>
+            <DialogDescription>Please confirm you are deleting {currentAppModule.moduleName} module from the database?</DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <DialogClose asChild>
+              <Button variant="outline">Cancel</Button>
+            </DialogClose>
+            <Button variant="outline" onClick={moduleForm.handleSubmit(handleDeleteModule)}>Confirm</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+            
             </div>
           </div>
         </form>
+      )}
 
-        {isLoading && <div className="flex justify-center"><Spinner className="size-15" /></div>}
+      {isLoading && <div className="flex justify-center"><Spinner className="size-15" /></div>}
 
-        {appModules.map((v, i) => {
-          return (
-            <div key={v.id} className={twMerge(v.isActive === false && "bg-orange-100 dark:bg-orange-950", "flex flex-row justify-between mt-3 p-2 border border-orange-800 rounded-lg")}>
-              <div className="space-y-1">
-                <p className="font-bold">{v.moduleName}</p>
-                <p className="line-clamp-3">{v.moduleDesc || "No description"}</p>
-                <p>URL: {v.url}</p>
-                <p>Active: {v.isActive === true ? "YES" : "NO"}</p>
-                <p>Sort order: {v.order}</p>
-                <p>Created: {v.createdAt.toISOString()}</p>
-                <p>Updated: {v.updatedAt.toISOString()}</p>
-              </div>
-              <Button variant="outline" size="icon" disabled={isLoading} onClick={e => handleEditModule(e, i)}><Pencil /></Button>
+      {appModules.map((v, i) => {
+        return (
+          <div key={v.id} className={twMerge(v.isActive === false && "bg-orange-100 dark:bg-orange-950", "flex flex-row justify-between mt-3 p-2 border border-orange-800 rounded-lg")}>
+            <div className="space-y-1">
+              <p className="font-bold">{v.moduleName}</p>
+              <p className="line-clamp-3">{v.moduleDesc || "No description"}</p>
+              <p>URL: {v.url}</p>
+              <p>Active: {v.isActive === true ? "YES" : "NO"}</p>
+              <p>Sort order: {v.order}</p>
+              <p>Created: {v.createdAt.toISOString()}</p>
+              <p>Updated: {v.updatedAt.toISOString()}</p>
             </div>
-          )
-        })}
-      </div>
+            <Button variant="outline" size="icon" disabled={isLoading} onClick={e => handleEditModule(e, i)}><Pencil /></Button>
+          </div>
+        )
+      })}
+
 
     </div>
   )
