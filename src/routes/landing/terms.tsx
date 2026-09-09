@@ -30,7 +30,8 @@ export default function Terms({ coolBeans, setTcOpen }: TsAndCsProps) {
       {/* <h1 className="font-semibold pt-2"></h1> */}
       {TCLoading ? (<Spinner />) : (
         // <div className="h-80 max-w-screen-sm sm:h-120 md:h-120 overflow-y-auto">
-        <div className="h-[calc(100dvh-335px)] sm:h-[calc(100dvh-300px)] max-w-screen-sm md:max-w-3xl overflow-y-auto">
+        // <div className="h-[calc(100dvh-290px)] sm:h-[calc(100dvh-300px)] max-w-screen-sm md:max-w-3xl overflow-y-auto">
+        <div className="h-[calc(100dvh-295px)] max-w-screen-sm md:max-w-3xl overflow-y-auto">
           <article className="prose prose-sm dark:prose-invert max-w-none p-2 bg-white dark:bg-black font-mono text-sm">
             <Markdown remarkPlugins={[remarkGfm]}>{mdTAC}</Markdown>
           </article >

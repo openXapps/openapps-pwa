@@ -1,18 +1,17 @@
 import { useEffect, useState } from "react"
 import { Link } from "react-router"
-import { twMerge } from "tailwind-merge"
 
 import type { SAppModule } from "@/schemas/app-schemas"
+
 import { Button } from "@/components/ui/button"
 import { ChevronDown, ChevronUp } from "lucide-react"
 
 type AppCardProps = {
   app: SAppModule
   cookieAccepted: boolean
-  isEven: boolean
 }
 
-export default function AppCard({ app, cookieAccepted, isEven }: AppCardProps) {
+export default function AppCard({ app, cookieAccepted }: AppCardProps) {
   const [readMore, setReadMore] = useState(false)
   const [desc, setDesc] = useState(app.moduleDesc)
 
@@ -24,7 +23,7 @@ export default function AppCard({ app, cookieAccepted, isEven }: AppCardProps) {
   }, [readMore])
 
   return (
-    <div className={twMerge(!isEven && "bg-muted", "p-2 min-h-25")}>
+    <div className="min-h-25 w-full bg-card text-card-foreground rounded-lg p-2">
       <div className="flex gap-3 max-w-3xl mx-auto">
         {cookieAccepted ? (
           <>
