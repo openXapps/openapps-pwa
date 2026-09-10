@@ -70,7 +70,7 @@ export default function AppBar() {
           <h1 className="sm:text-xl font-bold tracking-wide">{getTitle(routeContext.routeState.routeId)}</h1>
         </div>
         {rrLocation.pathname === "/" ? (
-          <div className="flex gap-1 items-center">
+          <div className="flex gap-2 items-center">
             <Button variant="outline" size="icon" onClick={toggleTheme}><Sun /></Button>
             {getIsAuthorized() ? (
               <DropdownMenu>

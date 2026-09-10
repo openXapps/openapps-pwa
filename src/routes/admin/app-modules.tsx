@@ -191,7 +191,7 @@ export default function AppModules() {
   }
 
   return (
-    <div className="mx-auto max-w-screen-sm space-y-3">
+    <div className="mx-auto max-w-screen-sm space-y-3 p-3 bg-background rounded-lg">
       <div className="flex justify-between items-center">
         <p className="">Configure OpenApps web modules.</p>
         <Button variant="outline" size="icon" onClick={(e) => { e.preventDefault() }}><Plus /></Button>

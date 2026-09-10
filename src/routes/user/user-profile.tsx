@@ -4,14 +4,29 @@ import { Controller, useForm } from "react-hook-form"
 import * as z from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 
-import { toast } from "sonner"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Separator } from "@/components/ui/separator"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { Field, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field"
-import { InputGroup, InputGroupAddon, InputGroupButton, InputGroupInput } from "@/components/ui/input-group"
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle
+} from "@/components/ui/card"
+import {
+  Field,
+  FieldError,
+  FieldGroup,
+  FieldLabel
+} from "@/components/ui/field"
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupButton,
+  InputGroupInput
+} from "@/components/ui/input-group"
 
 import useAuth from '@/hooks/useAuth'
 import type { TUserInfoType } from "@/types/firestore-types"
@@ -19,7 +34,7 @@ import type { TUserInfoType } from "@/types/firestore-types"
 // https://picsum.photos/
 
 const formSchema = z.object({
-  knownAs: z.string().min(2, "Not a valid name").max(30, "Name is too long"),
+  knownAs: z.string().min(2, "Not a valid name").max(20, "Name is too long"),
   username: z
     .string()
     .regex(/^\S+@\S+\.\S+$/, "Username must be a valid email address"),

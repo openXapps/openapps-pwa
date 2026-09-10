@@ -20,7 +20,7 @@ export default function Layout() {
       <div className="">
         <AppBar />
       </div>
-      <div className="mt-20 mb-12 mx-2 sm:mx-0">
+      <div className="mt-20 mb-12 mx-2">
         <Outlet />
       </div>
     </>

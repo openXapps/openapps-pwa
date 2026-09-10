@@ -24,7 +24,7 @@ export default function AppCard({ app, cookieAccepted }: AppCardProps) {
 
   return (
     <div className="min-h-25 w-full bg-card text-card-foreground rounded-lg p-2">
-      <div className="flex gap-3 max-w-3xl mx-auto">
+      <div className="flex gap-3">
         {cookieAccepted ? (
           <>
             <Link className="grow" to={app.url}>

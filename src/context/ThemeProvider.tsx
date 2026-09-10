@@ -1,6 +1,6 @@
 import { createContext, useEffect, useState } from "react"
 
-import type { TThemeProviderProps, TThemeContextState, TTheme } from "@/types/theme-types"
+import type { TThemeProviderProps, TThemeContextState, TTheme } from "@/types/theme-context-types"
 
 const initialState: TThemeContextState = {
   theme: "system",
