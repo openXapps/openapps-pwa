@@ -29,6 +29,7 @@ import {
 } from "@/components/ui/input-group"
 
 import useAuth from "@/hooks/useAuth"
+import { getIP } from "@/lib/ip"
 
 // https://ui.shadcn.com/docs/forms/react-hook-form
 // https://uibakery.io/regex-library/password
@@ -46,6 +47,8 @@ const formSchema = z.object({
     .regex(/[^A-Za-z0-9]/, "Password must contain at least one special character")
 })
 // .regex(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/, "Password is not strong enough")
+
+getIP()
 
 export default function SignUpUser() {
   const rrNavigate = useNavigate()

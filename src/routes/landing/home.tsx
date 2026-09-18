@@ -25,6 +25,8 @@ export default function Home() {
     const data: TGetAllDocumentsProps<SAppModule> = await getAllDocuments("/appModules/", appModuleConverter)
     if (data.ok) {
       setAppModules(data.payload.sort((a, b) => (a.order || 100) - (b.order || 100)))
+      console.log(data.payload);
+      
     } else {
       setIsError({ ok: false, message: `Oops! Looks like we cannot reach the cloud. ${data.message}.` })
     }
