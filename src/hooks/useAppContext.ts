@@ -1,4 +1,5 @@
-import { useContext, useEffect, useState } from "react"
+// import { useContext, useEffect, useState } from "react"
+import { useContext } from "react"
 import { AppProviderContext } from "@/context/AppProvider"
 import type { TAppContextType } from "@/types/app-context-types"
 

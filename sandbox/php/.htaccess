@@ -1,0 +1,13 @@
+RewriteEngine On
+RewriteCond %{HTTPS} off
+RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+RewriteRule ^404/?$ /err/404.html [NC]
+
+# Enable Error Documents
+# (404,File Not Found) | (403,Forbidden) | (500,Internal Server Error)
+ErrorDocument 404 /404
+ErrorDocument 403 /404
+
+# Hide the contents of directories
+Options -Indexes
+

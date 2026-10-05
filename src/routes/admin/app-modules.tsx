@@ -1,4 +1,5 @@
-import { useEffect, useRef, useState } from "react"
+// import { useEffect, useRef, useState } from "react"
+import { useEffect, useState } from "react"
 import { twMerge } from "tailwind-merge"
 import { Controller, useForm } from "react-hook-form"
 import * as z from "zod"
@@ -249,23 +250,23 @@ export default function AppModules() {
               <Button type="submit" variant="outline" size="icon" onClick={moduleForm.handleSubmit(handleUpdateModule)}><Save /></Button>
               <Button type="submit" variant="outline" size="icon" disabled={!currentAppModule.id} onClick={handleReset}><Undo2 /></Button>
               <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogTrigger asChild>
-          <Button variant="destructive" size="icon" disabled={!currentAppModule.id}><Trash2 /></Button>
-        </DialogTrigger>
-        <DialogContent className="sm:max-w-100">
-          <DialogHeader>
-            <DialogTitle>Confirm delete</DialogTitle>
-            <DialogDescription>Please confirm you are deleting {currentAppModule.moduleName} module from the database?</DialogDescription>
-          </DialogHeader>
-          <DialogFooter>
-            <DialogClose asChild>
-              <Button variant="outline">Cancel</Button>
-            </DialogClose>
-            <Button variant="outline" onClick={moduleForm.handleSubmit(handleDeleteModule)}>Confirm</Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-            
+                <DialogTrigger asChild>
+                  <Button variant="destructive" size="icon" disabled={!currentAppModule.id}><Trash2 /></Button>
+                </DialogTrigger>
+                <DialogContent className="sm:max-w-100">
+                  <DialogHeader>
+                    <DialogTitle>Confirm delete</DialogTitle>
+                    <DialogDescription>Please confirm you are deleting {currentAppModule.moduleName} module from the database?</DialogDescription>
+                  </DialogHeader>
+                  <DialogFooter>
+                    <DialogClose asChild>
+                      <Button variant="outline">Cancel</Button>
+                    </DialogClose>
+                    <Button variant="outline" onClick={moduleForm.handleSubmit(handleDeleteModule)}>Confirm</Button>
+                  </DialogFooter>
+                </DialogContent>
+              </Dialog>
+
             </div>
           </div>
         </form>
