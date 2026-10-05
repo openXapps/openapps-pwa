@@ -1,4 +1,4 @@
-export type TModulesRecord = {
+export type TAppModulesRecord = {
   id: number
   moduleName: string
   moduleDesc: string
@@ -8,9 +8,9 @@ export type TModulesRecord = {
   order: number
 }
 
-export type TModules = TModulesRecord[]
+export type TAppModules = TAppModulesRecord[]
 
-export const modules: TModules = [
+export const appModules: TAppModules = [
   {
     id: 1,
     moduleName: "BookMARKER",

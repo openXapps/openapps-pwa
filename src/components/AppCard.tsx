@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react"
 import { Link } from "react-router"
 
-import type { SAppModule } from "@/schemas/app-schemas"
+// import type { SAppModule } from "@/schemas/app-schemas"
 
 import { Button } from "@/components/ui/button"
 import { ChevronDown, ChevronUp } from "lucide-react"
+import type { TAppModulesRecord } from "@/data/modules"
 
 type AppCardProps = {
-  app: SAppModule
+  app: TAppModulesRecord
   cookieAccepted: boolean
 }
 
