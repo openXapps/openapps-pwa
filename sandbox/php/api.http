@@ -1,7 +1,0 @@
-POST https://openapps.co.za/api/api-test2.php
-Content-Type: application/json
-
-{
-  "val1": "Joe",
-  "val2": "joe@domain.com"
-}

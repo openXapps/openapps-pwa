@@ -30,6 +30,7 @@ import {
 
 import useAuth from "@/hooks/useAuth"
 import { getIP } from "@/lib/ip"
+import RecaptchaForm from "@/components/ReCaptcha"
 
 // https://ui.shadcn.com/docs/forms/react-hook-form
 // https://uibakery.io/regex-library/password
@@ -175,6 +176,7 @@ export default function SignUpUser() {
           </Field>
         </CardFooter>
       </Card>
+      <RecaptchaForm />
     </div>
   )
 }
