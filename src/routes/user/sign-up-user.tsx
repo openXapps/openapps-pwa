@@ -56,6 +56,7 @@ export default function SignUpUser() {
   const { signUpUser, setIsAuthorized, getIsAuthorized, setInfo } = useAuth()
   const [isBusy, setIsBusy] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
+  const [isBot, setIsBot] = useState(true)
   const signUpForm = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -171,12 +172,12 @@ export default function SignUpUser() {
         <CardFooter>
           <Field orientation="horizontal">
             <Button type="button" variant="outline" disabled={isBusy} onClick={() => signUpForm.reset()}>Reset</Button>
-            <Button type="submit" className="grow" disabled={isBusy || getIsAuthorized()} form="form-sign-up">Submit</Button>
+            <Button type="submit" className="grow" disabled={isBusy || getIsAuthorized() || isBot} form="form-sign-up">Submit</Button>
             <Button type="button" variant="outline" disabled={isBusy} onClick={() => rrNavigate(-1)}>Back</Button>
           </Field>
         </CardFooter>
+        <RecaptchaForm setIsBot={setIsBot} />
       </Card>
-      <RecaptchaForm />
     </div>
   )
 }
