@@ -1,0 +1,7 @@
+POST https://openapps.co.za/api/verify-recaptcha.php
+Content-Type: application/json
+Origin: http://localhost
+
+{
+  "token": "xx"
+}

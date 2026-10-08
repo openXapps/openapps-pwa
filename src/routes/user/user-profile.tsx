@@ -3,10 +3,10 @@ import { useNavigate } from 'react-router'
 import { Controller, useForm } from "react-hook-form"
 import * as z from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
+import type { TUserInfoType } from "@/types/firestore-types"
 
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
-import { Separator } from "@/components/ui/separator"
 import {
   Card,
   CardContent,
@@ -29,7 +29,8 @@ import {
 } from "@/components/ui/input-group"
 
 import useAuth from '@/hooks/useAuth'
-import type { TUserInfoType } from "@/types/firestore-types"
+import ReCaptcha from '@/components/ReCaptcha'
+import PasswordNote from '@/components/PasswordNote'
 
 // https://picsum.photos/
 
@@ -52,6 +53,7 @@ export default function UserProfile() {
   const rrNavigate = useNavigate()
   const { getInfo, setInfo, setEmail, setPassword, getUID, getIsAdmin } = useAuth()
   const [isBusy, setIsBusy] = useState(false)
+  const [isBot, setIsBot] = useState(true)
   const currentValues: TUserInfoType = getInfo()
   const [showPassword, setShowPassword] = useState(false)
   const profileForm = useForm<z.infer<typeof formSchema>>({
@@ -106,7 +108,7 @@ export default function UserProfile() {
 
   return (
     <div className="max-w-md mx-auto">
-      <Card>
+      <Card className="gap-3 sm:gap-5">
         <CardHeader>
           <CardTitle>Update your user details</CardTitle>
           <CardDescription>
@@ -115,7 +117,7 @@ export default function UserProfile() {
         </CardHeader>
         <CardContent>
           <form id="form-profile" onSubmit={profileForm.handleSubmit(handleUpdateProfile)}>
-            <FieldGroup>
+            <FieldGroup className="gap-3 sm:gap-5">
               <Controller
                 name="knownAs"
                 control={profileForm.control}
@@ -176,22 +178,12 @@ export default function UserProfile() {
               />
             </FieldGroup>
           </form>
-          <p className="mt-4 text-sm">Typical requirements for a "strong" password include:</p>
-          <ul className="text-sm">
-            <li>- A minimum length (commonly 8 characters or more).</li>
-            <li>- At least one uppercase letter.</li>
-            <li>- At least one lowercase letter.</li>
-            <li>- At least one number (digit).</li>
-            <li>- At least one special character (e.g. !  @  #  $  %).</li>
-          </ul>
-          <Separator className="my-3" />
-          <p>Email validated: {currentValues.emailVerified ? 'YES' : 'NO'}</p>
-          <p>Administrator: {getIsAdmin() ? 'YES' : 'NO'}</p>
-          <p>User ID: {getUID()}</p>
+          <PasswordNote />
+          {isBot && <ReCaptcha className="mt-2" setIsBot={setIsBot} />}
         </CardContent>
-        <CardFooter className="mt-5">
+        <CardFooter className="">
           <Field orientation="horizontal">
-            <Button type="submit" className="grow" disabled={isBusy} form="form-profile">Submit</Button>
+            <Button type="submit" className="grow" disabled={isBusy || isBot} form="form-profile">Submit</Button>
             <Button type="button" variant="outline" disabled={isBusy} onClick={() => rrNavigate(-1)}>Back</Button>
           </Field>
         </CardFooter>

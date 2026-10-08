@@ -30,7 +30,7 @@ import {
 
 import useAuth from "@/hooks/useAuth"
 import { getIP } from "@/lib/ip"
-import RecaptchaForm from "@/components/ReCaptcha"
+import ReCaptcha from "@/components/ReCaptcha"
 
 // https://ui.shadcn.com/docs/forms/react-hook-form
 // https://uibakery.io/regex-library/password
@@ -91,7 +91,7 @@ export default function SignUpUser() {
 
   return (
     <div className="max-w-md mx-auto">
-      <Card>
+      <Card className="gap-3 sm:gap-5">
         <CardHeader>
           <CardTitle>Create a new account</CardTitle>
           <CardDescription>
@@ -100,7 +100,7 @@ export default function SignUpUser() {
         </CardHeader>
         <CardContent>
           <form id="form-sign-up" onSubmit={signUpForm.handleSubmit(onSubmit)}>
-            <FieldGroup>
+            <FieldGroup className="gap-3 sm:gap-5">
               <Controller
                 name="knownAs"
                 control={signUpForm.control}
@@ -160,14 +160,15 @@ export default function SignUpUser() {
               />
             </FieldGroup>
           </form>
-          <p className="mt-4 text-sm">Typical requirements for a "strong" password include:</p>
-          <ul className="text-sm">
+          <p className="text-sm">Typical requirements for a "strong" password include:</p>
+          <ul className="text-[10px] sm:text-sm">
             <li>- A minimum length (commonly 8 characters or more).</li>
             <li>- At least one uppercase letter.</li>
             <li>- At least one lowercase letter.</li>
             <li>- At least one number (digit).</li>
             <li>- At least one special character (e.g. !  @  #  $  %).</li>
           </ul>
+          {isBot && <ReCaptcha setIsBot={setIsBot} />}
         </CardContent>
         <CardFooter>
           <Field orientation="horizontal">
@@ -176,7 +177,6 @@ export default function SignUpUser() {
             <Button type="button" variant="outline" disabled={isBusy} onClick={() => rrNavigate(-1)}>Back</Button>
           </Field>
         </CardFooter>
-        <RecaptchaForm setIsBot={setIsBot} />
       </Card>
     </div>
   )

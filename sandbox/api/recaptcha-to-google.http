@@ -1,0 +1,9 @@
+POST https://www.google.com/recaptcha/api/siteverify
+Accept: application/json
+Content-Type: application/x-www-form-urlencoded; charset=utf-8
+Origin: http://localhost
+
+{
+  "secret": "xx",
+  "response": "xx"
+}

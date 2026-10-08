@@ -12,6 +12,7 @@ import { Field, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field
 import { InputGroup, InputGroupAddon, InputGroupButton, InputGroupInput } from "@/components/ui/input-group"
 
 import useAuth from "@/hooks/useAuth"
+import ReCaptcha from "@/components/ReCaptcha"
 
 // const isErrorInit: { status: boolean, message: string } = { status: false, message: "" }
 
@@ -27,6 +28,7 @@ export default function SignInUser() {
   const rrNavigate = useNavigate()
   const { signInUser, setIsAuthorized, getIsAuthorized, setIsAdmin } = useAuth()
   const [isBusy, setIsBusy] = useState(false)
+  const [isBot, setIsBot] = useState(true)
   const [showPassword, setShowPassword] = useState(false)
   const signInForm = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -51,7 +53,7 @@ export default function SignInUser() {
 
   return (
     <div className="max-w-md mx-auto">
-      <Card>
+      <Card className="gap-3 sm:gap-5">
         <CardHeader>
           <CardTitle>Sign-in with your existing account</CardTitle>
           <CardDescription>
@@ -60,7 +62,7 @@ export default function SignInUser() {
         </CardHeader>
         <CardContent>
           <form id="form-sign-up" onSubmit={signInForm.handleSubmit(onSubmit)}>
-            <FieldGroup>
+            <FieldGroup className="gap-3 sm:gap-5">
               <Controller
                 name="username"
                 control={signInForm.control}
@@ -103,11 +105,12 @@ export default function SignInUser() {
               />
             </FieldGroup>
           </form>
+          {isBot && <ReCaptcha className="mt-2" setIsBot={setIsBot} />}
         </CardContent>
         <CardFooter className="mt-2">
           <Field orientation="horizontal">
             <Button type="button" variant="outline" disabled={isBusy} onClick={() => signInForm.reset()}>Reset</Button>
-            <Button type="submit" className="grow" disabled={isBusy || getIsAuthorized()} form="form-sign-up">Submit</Button>
+            <Button type="submit" className="grow" disabled={isBusy || getIsAuthorized() || isBot} form="form-sign-up">Submit</Button>
             <Button type="button" variant="outline" disabled={isBusy} onClick={() => rrNavigate(-1)}>Back</Button>
           </Field>
         </CardFooter>
