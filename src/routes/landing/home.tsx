@@ -3,7 +3,7 @@ import AppCard from "@/components/AppCard"
 import useAppContext from "@/hooks/useAppContext"
 import { appModules } from "@/data/modules"
 
-export default function Home() {
+export default function RootHome() {
   const { appContext, createTcCookie } = useAppContext()
 
   return (

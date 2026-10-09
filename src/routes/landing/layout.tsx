@@ -4,7 +4,7 @@ import { Outlet } from "react-router"
 import AppBar from "@/components/AppBar"
 import { Toaster } from "@/components/ui/sonner"
 
-export default function Layout() {
+export default function RootLayout() {
   // const rrLocation = useLocation()
 
   /**

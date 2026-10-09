@@ -6,10 +6,6 @@ export const routes: TRoutes[] = [
     routeTitle: "OpenApps",
   },
   {
-    routeId: "/appmodules",
-    routeTitle: "Module Administration",
-  },
-  {
     routeId: "/user",
     routeTitle: "My User profile",
   },
@@ -22,7 +18,15 @@ export const routes: TRoutes[] = [
     routeTitle: "Sign Up",
   },
   {
-    routeId: "/xx",
-    routeTitle: "xx",
+    routeId: "/bookmarker",
+    routeTitle: "BookMARKER",
+  },
+  {
+    routeId: "/bookmarker/settings",
+    routeTitle: "BookMARKER Settings",
+  },
+  {
+    routeId: "/bookmarker/about",
+    routeTitle: "About BookMARKER",
   },
 ]
